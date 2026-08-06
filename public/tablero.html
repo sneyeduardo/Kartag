@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telemetría Karting - Réplica LED</title>
+    <link rel="stylesheet" href="css/styles1.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+
+        .pantalla-oculta { display: none !important; }
+        ::view-transition-old(*),
+        ::view-transition-new(*) {
+            animation-duration: 0.6s;
+            animation-timing-function: cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        #pantalla-reposo {
+            position: relative;
+            height: 100%;
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .slide-podio { position: absolute; top: 20%; width: 100%; text-align: center; opacity: 0; transition: opacity 1.5s ease-in-out; pointer-events: none; }
+        .slide-podio.activo { opacity: 1; pointer-events: auto; }
+        .titulo-podio { color: #00ffcc; font-size: 2.5rem; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 30px; text-shadow: 0 0 10px rgba(0, 255, 204, 0.5); }
+        .fila-campeon { display: flex; justify-content: space-between; background: rgba(0, 0, 0, 0.6); border: 1px solid #333; margin: 10px auto; padding: 15px 30px; width: 70%; border-radius: 8px; font-size: 1.8rem; font-weight: 800; }
+        .campeon-pos1 { border-color: #ffd700; color: #ffd700; box-shadow: 0 0 15px rgba(255, 215, 0, 0.2); }
+        .campeon-pos2 { border-color: #c0c0c0; color: #c0c0c0; }
+        .campeon-pos3 { border-color: #cd7f32; color: #cd7f32; }
+    </style>
+</head>
+<body class="broadcast-mode">
+
+    <main class="dashboard-wrapper">
+        
+        <!-- PANTALLA 1: CARRERA EN VIVO -->
+        <div class="led-scoreboard" id="pantalla-carrera">
+            <div class="led-top-bar">
+                <div class="session-badge">KARTAG RACE</div>
+                <div class="timer" id="reloj">00:00:00</div>
+            </div>
+
+            <div class="board-header">
+                <div></div>
+                <div>Pos</div>
+                <div>Nombre</div>
+                <div>Vueltas</div>
+                <div>Tiempo</div>
+                <div class="center-text">Kart</div>
+                <div>Mejor</div>
+            </div>
+
+            <!-- Filas de Carrera -->
+            <div class="board-row row-cyan" id="fila-0"><div class="avatar-cell"><div class="helmet-icon white-helmet"></div></div><div class="pos-cell">1</div><div class="name-cell">---</div><div class="lap-cell">0</div><div class="time-cell time-green">00:00.000</div><div class="kart-cell"><span class="kart-badge bg-green">-</span></div><div class="best-cell">00:00.000</div></div>
+            <div class="board-row row-red" id="fila-1"><div class="avatar-cell"><div class="helmet-icon blue-helmet"></div></div><div class="pos-cell">2</div><div class="name-cell">---</div><div class="lap-cell">0</div><div class="time-cell time-green">00:00.000</div><div class="kart-cell"><span class="kart-badge bg-orange">-</span></div><div class="best-cell">00:00.000</div></div>
+            <div class="board-row row-dark" id="fila-2"><div class="avatar-cell"><div class="helmet-icon dark-helmet"></div></div><div class="pos-cell">3</div><div class="name-cell">---</div><div class="lap-cell">0</div><div class="time-cell time-red">00:00.000</div><div class="kart-cell"><span class="kart-badge bg-red">-</span></div><div class="best-cell">00:00.000</div></div>
+            <div class="board-row row-pa" id="fila-3"><div class="avatar-cell"><div class="helmet-icon white-helmet"></div></div><div class="pos-cell">4</div><div class="name-cell">---</div><div class="lap-cell">0</div><div class="time-cell time-red">00:00.000</div><div class="kart-cell"><span class="kart-badge bg-red">-</span></div><div class="best-cell">00:00.000</div></div>
+            <div class="board-row row-da" id="fila-4"><div class="avatar-cell"><div class="helmet-icon dark-helmet"></div></div><div class="pos-cell">5</div><div class="name-cell">---</div><div class="lap-cell">0</div><div class="time-cell time-red">00:00.000</div><div class="kart-cell"><span class="kart-badge bg-red">-</span></div><div class="best-cell">00:00.000</div></div>
+            <div class="board-row row-la" id="fila-5"><div class="avatar-cell"><div class="helmet-icon blue-helmet"></div></div><div class="pos-cell">6</div><div class="name-cell">---</div><div class="lap-cell">0</div><div class="time-cell time-red">00:00.000</div><div class="kart-cell"><span class="kart-badge bg-red">-</span></div><div class="best-cell">00:00.000</div></div>
+        </div>
+
+        <!-- MODO REPOSO -->
+        <div class="led-scoreboard pantalla-oculta" id="pantalla-reposo">
+            <div class="slide-podio activo" id="slide-semana">
+                <h2 class="titulo-podio">🔥 Récords de la Semana 🔥</h2>
+                <div id="lista-semana"></div>
+            </div>
+            <div class="slide-podio" id="slide-mes">
+                <h2 class="titulo-podio">👑 Reyes del Mes 👑</h2>
+                <div id="lista-mes"></div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // Reloj superior
+        function mostrarHora() {
+            const fecha = new Date();
+            document.getElementById("reloj").textContent = fecha.toLocaleTimeString('es-VE', { hour12: false });
+        }
+        setInterval(mostrarHora, 1000);
+        mostrarHora();
+
+        // Control de carrusel (Modo Reposo)
+        let slideActual = 'semana';
+        setInterval(() => {
+            const pantallaReposo = document.getElementById('pantalla-reposo');
+            if (!pantallaReposo.classList.contains('pantalla-oculta')) {
+                if (slideActual === 'semana') {
+                    document.getElementById('slide-semana').classList.remove('activo');
+                    document.getElementById('slide-mes').classList.add('activo');
+                    slideActual = 'mes';
+                } else {
+                    document.getElementById('slide-mes').classList.remove('activo');
+                    document.getElementById('slide-semana').classList.add('activo');
+                    slideActual = 'semana';
+                }
+            }
+        }, 8000);
+
+        function construirPodio(datos, contenedorId) {
+            const contenedor = document.getElementById(contenedorId);
+            contenedor.innerHTML = ''; 
+            if (datos.length === 0) {
+                contenedor.innerHTML = '<div class="fila-campeon"><span>Aún no hay tiempos registrados</span></div>';
+                return;
+            }
+            const estilos = ['campeon-pos1', 'campeon-pos2', 'campeon-pos3'];
+            const medallas = ['🥇', '🥈', '🥉'];
+            datos.forEach((piloto, index) => {
+                contenedor.innerHTML += `
+                    <div class="fila-campeon ${estilos[index]}">
+                        <span>${medallas[index]} ${piloto.nombre_piloto}</span>
+                        <span>${piloto.mejor_vuelta}</span>
+                    </div>`;
+            });
+        }
+
+        // LÓGICA DE MAPEO Y ANIMACIÓN DE FILAS
+        let mapeoPilotos = {}; 
+        let filasHTMLLibres = []; 
+
+        
+        window.addEventListener('DOMContentLoaded', () => {
+            const filas = document.querySelectorAll('#pantalla-carrera .board-row');
+            filas.forEach((fila, i) => {
+                
+                fila.style.viewTransitionName = 'fila-kart-' + i;
+                filasHTMLLibres.push(fila);
+            });
+        });
+
+        async function actualizarTablero() {
+            try {
+                const respuesta = await fetch('/api/tablero');
+                const json = await respuesta.json();
+
+                const pantallaCarrera = document.getElementById('pantalla-carrera');
+                const pantallaReposo = document.getElementById('pantalla-reposo');
+
+                if (json.status === 'success') {
+                    if (json.modo === 'carrera') {
+                        pantallaReposo.classList.add('pantalla-oculta');
+                        pantallaCarrera.classList.remove('pantalla-oculta');
+                        
+                        const pilotos = json.data;
+
+                        
+                        function reordenarFilasDOM() {
+                            const contenedor = document.getElementById('pantalla-carrera');
+                            
+                            
+                            pilotos.forEach((piloto, indexRank) => {
+                                if (!mapeoPilotos[piloto.nombre_piloto] && filasHTMLLibres.length > 0) {
+                                    mapeoPilotos[piloto.nombre_piloto] = filasHTMLLibres.shift();
+                                }
+                               
+                                let fila = mapeoPilotos[piloto.nombre_piloto];
+                                
+                                if (fila) {
+                                    fila.querySelector('.name-cell').textContent = piloto.nombre_piloto;
+                                    fila.querySelector('.pos-cell').textContent = indexRank + 1;
+                                    fila.querySelector('.lap-cell').textContent = piloto.vueltas_completadas;
+                                    fila.querySelector('.time-cell').textContent = piloto.ultima_vuelta;
+                                    fila.querySelector('.kart-badge').textContent = piloto.numero_kart;
+                                    fila.querySelector('.best-cell').textContent = piloto.mejor_vuelta;
+                                    fila.classList.remove('row-cyan', 'row-red', 'row-dark', 'row-da', 'row-pa', 'row-la', 'kart-linea-1', 'kart-linea-2', 'kart-linea-3', 'kart-linea-4', 'kart-linea-5', 'kart-linea-6');
+                                    
+                                    if (piloto.numero_kart !== '-' && piloto.numero_kart !== '0') {
+                                        fila.classList.add('kart-linea-' + piloto.numero_kart);
+                                    }
+                                    
+                                    
+                                    contenedor.appendChild(fila);
+                                }
+                            });
+
+                            
+                            filasHTMLLibres.forEach(filaVacia => {
+                                contenedor.appendChild(filaVacia);
+                            });
+                        }
+
+                        
+                        if (document.startViewTransition) {
+                            document.startViewTransition(() => reordenarFilasDOM());
+                        } else {
+                            reordenarFilasDOM(); 
+                        }
+
+                    } else if (json.modo === 'reposo') {
+                        pantallaCarrera.classList.add('pantalla-oculta');
+                        pantallaReposo.classList.remove('pantalla-oculta');
+                        construirPodio(json.semana, 'lista-semana');
+                        construirPodio(json.mes, 'lista-mes');
+                        
+                        mapeoPilotos = {};
+                        filasHTMLLibres = Array.from(document.querySelectorAll('#pantalla-carrera .board-row'));
+                    }
+                }
+            } catch (error) {
+                
+            }
+        }
+
+        setInterval(actualizarTablero, 2000);
+    </script>
+</body>
+</html>

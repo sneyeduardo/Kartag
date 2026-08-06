@@ -1,0 +1,166 @@
+body {
+    margin: 0;
+    padding: 20px;
+    background-color: #1a1a1a;
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+    height: 100vh;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+}
+
+.header-monitor {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.header-monitor h1 {
+    margin: 0;
+    color: #00ffcc;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.monitor-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 20px;
+    flex: 1; 
+    min-height: 0;
+}
+
+.panel-card {
+    background: #222;
+    border: 1px solid #333;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    transition: all 0.3s ease;
+}
+
+.panel-header {
+    background: #111;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #444;
+}
+
+.panel-header h2 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.badge {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+.badge-gray { background: #555; color: #fff; }
+.badge-red { background: #dc0000; color: #fff; }
+.badge-green { background: #00ffcc; color: #000; }
+
+.lista-pilotos {
+    list-style: none;
+    margin: 0;
+    padding: 15px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.lista-pilotos li {
+    background: #333;
+    margin-bottom: 10px;
+    padding: 12px 15px;
+    border-radius: 6px;
+    display: flex;
+    justify-content: space-between;
+    font-weight: 600;
+}
+
+.lista-pilotos li.loading {
+    background: transparent;
+    color: #888;
+    text-align: center;
+    justify-content: center;
+}
+
+.panel-tablero {
+    display: flex;
+    flex-direction: column;
+}
+
+#iframe-tablero {
+    width: 100%;
+    flex: 1; 
+    background: #000;
+}
+
+.btn-expandir {
+    background: #00ffcc;
+    color: #000;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.3s;
+}
+
+.btn-expandir:hover { background: #00ccaa; }
+
+.panel-tablero.fullscreen-mode {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 9999;
+    border-radius: 0;
+    border: none;
+    background: #000;
+}
+
+/* Ocultar el título de la cabecera en pantalla completa */
+.panel-tablero.fullscreen-mode .panel-header h2 {
+    display: none;
+}
+
+/* Eliminar el borde y fondo del header para que no estorbe */
+.panel-tablero.fullscreen-mode .panel-header {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    background: transparent;
+    border: none;
+    padding: 0;
+    z-index: 10000;
+}
+
+/* Convertir el botón en un icono flotante discreto en la esquina */
+.panel-tablero.fullscreen-mode .btn-expandir {
+    background: rgba(0, 255, 204, 0.3);
+    color: #fff;
+    border-radius: 4px;
+    padding: 6px 10px;
+    opacity: 0.4; /* Muy discreto por defecto */
+    transition: all 0.3s ease;
+}
+
+/* Que se ilumine solo si el usuario pasa el mouse por la esquina superior derecha */
+.panel-tablero.fullscreen-mode .btn-expandir:hover {
+    background: #00ffcc;
+    color: #000;
+    opacity: 1;
+}

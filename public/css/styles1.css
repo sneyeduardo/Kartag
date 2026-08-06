@@ -1,0 +1,134 @@
+/*ENTORNO A PANTALLA COMPLETA (FULLSCREEN BROADCAST) */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body.broadcast-mode {
+    background-color: #0b0c10;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden; 
+    font-family: 'Montserrat', sans-serif;
+    color: white;
+}
+
+.dashboard-wrapper {
+    width: 100%;
+    height: 100%;
+}
+.led-scoreboard {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: #0b0c10;
+    gap: 8px;
+    margin: 0 auto;   
+}
+/*BARRA SUPERIOR CON ALTURA DINÁMICA*/
+.led-top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #111;
+    border-bottom: 2px solid #222;
+    padding-right: 2vw;
+    height: 8vh;  
+}
+
+.session-badge {
+    background-color: #d10024;
+    color: white;
+    font-weight: 900;
+    padding: 0 4vw 0 2vw; 
+    height: 100%;
+    display: flex;
+    align-items: center;
+    font-size: 3vh;
+    clip-path: polygon(0 0, 100% 0, 85% 100%, 0% 100%);
+    letter-spacing: 2px;
+}
+
+.timer {
+    color: #00ffcc;
+    font-weight: 700;
+    font-size: 4vh;
+    font-variant-numeric: tabular-nums;
+}
+
+/*SISTEMA GRID*/
+.board-header, .board-row {
+    display: grid;
+    grid-template-columns: 0.5fr 0.5fr 2fr 1fr 1.5fr 1fr 1.5fr;
+    align-items: center;
+    padding: 0 2vw;
+    width: 100%;
+}
+
+.board-header {
+    height: 6vh;
+    font-size: 2vh;
+    color: #666;
+    text-transform: uppercase;
+    font-weight: 700;
+}          
+
+.board-row {
+    flex: 1; 
+    font-size: 4.5vh;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+.kart-linea-1 { border-bottom: 3px solid #00ff66; background-color: rgba(0, 255, 102, 0.05); } 
+.kart-linea-2 { border-bottom: 3px solid #ff3333; background-color: rgba(255, 51, 51, 0.05); } 
+.kart-linea-3 { border-bottom: 3px solid #3366ff; background-color: rgba(51, 102, 255, 0.05); } 
+.kart-linea-4 { border-bottom: 3px solid #ff9900; background-color: rgba(255, 153, 0, 0.05); } 
+.kart-linea-5 { border-bottom: 3px solid #dc143c; background-color: rgba(220, 20, 60, 0.05); } 
+.kart-linea-6 { border-bottom: 3px solid #ffffff; background-color: rgba(255, 255, 255, 0.05); } 
+
+/*ESTILOS DE DATOS, AVATARES Y KARTS */
+.time-cell, .best-cell, .lap-cell, .pos-cell {
+    font-variant-numeric: tabular-nums;
+    color: #ffffff; 
+}
+.center-text { text-align: center; }
+.kart-cell {
+    display: flex;
+    justify-content: center;
+}
+.helmet-icon {
+    width: 6vh;
+    height: 6vh;
+    border-radius: 50%;
+    border: 3px solid #333;
+}
+.white-helmet { background-color: #eee; }
+.blue-helmet { background-color: #3b5998; }
+.dark-helmet { background-color: #222; }
+
+.kart-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 6.5vh;
+    height: 6.5vh;
+    border-radius: 50%;
+    font-weight: 900;
+    font-size: 3vh;
+    color: white;
+    border: 2px solid rgba(255,255,255,0.2);
+}
+.name-cell {
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+    text-align: left; 
+    width: 100%; 
+}
+
+.bg-green { background-color: #008a4e; } 
+.bg-orange { background-color: #d85c18; } 
+.bg-red { background-color: #c41212; }
