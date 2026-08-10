@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const links = document.querySelectorAll('.nav-links a');
     const indicator = document.querySelector('.nav-indicator');
     let isClickScrolling = false;
+    
 
     function moveIndicator(elemento) {
         const anchoElemento = elemento.offsetWidth;

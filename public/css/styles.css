@@ -224,7 +224,7 @@ body {
     .leaderboard-widget {
         background: rgba(187, 187, 187, 0.95);
         border-radius: 29px;
-        padding: 50px;
+        padding: 42px;
         width: 438px;
         color: #000;
         transform: translate(142px, 103px); 
@@ -483,50 +483,47 @@ body {
 img.ajuste-leonardo {
     left: 40px !important; 
 }
-/*SECCIÓN NOSOTROS (ESTADÍSTICAS)*/
+
 .nosotros-section {
     position: relative;
     width: 100%;
     max-width: 1420px; 
     margin: 10px auto; 
-    background-image: url('../assets/img/Fondonosotros.png');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
+    background-color: #000000; /* Fondo negro de seguridad mientras carga el video */
     aspect-ratio: 16 / 9;
     border-radius: 20px;
     overflow: hidden;
     font-family: 'Montserrat', sans-serif;
 }
 
-/* --- Textos de la parte superior --- */
-.nosotros-header {
+/* NUEVO: Configuración del video para que actúe como fondo */
+.video-fondo {
     position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Asegura que el video llene la caja sin deformarse */
+    z-index: 1; /* Lo enviamos al fondo */
+    opacity: 0.8; /* Opcional: Oscurece un poco el video para que resalte el texto */
+}
+
+/* ASEGURAR QUE EL TEXTO ESTÉ POR ENCIMA DEL VIDEO */
+.nosotros-header {
+    position: absolute; /* Mantenemos tu absolute anterior */
     top: 5%;
     left: 2.2%;
     width: 90%;
-    z-index: 2;
-    
+    z-index: 2; /* Mayor que el z-index del video (1) */
 }
 
-.badge-nosotros {
-    display: inline-block;
-    border: 1px solid #b87333; 
-    color: #ffffff;
-    padding: 8px 20px;
-    border-radius: 8px;
-    font-size: 2rem;
-    font-weight: 600;
-    letter-spacing: 1.5px;
-    margin-bottom: 12px;
-}
-
-.nosotros-header p {
-    font-size: clamp(0.85rem, 1.2vw, 1.1rem); 
-    line-height: 1.5;
-    color: #f2f2f2;
-    font-weight: 400;
-    max-width: 92%;
+.stats-grid {
+    position: absolute;
+    top: 0; 
+    left: 0;
+    width: 100%; 
+    height: 100%;
+    z-index: 2; /* Mayor que el z-index del video (1) */
 }
 
 /*Red de Estadísticas */
@@ -536,6 +533,9 @@ img.ajuste-leonardo {
     width: 100%; height: 100%;
 }
 
+/* =========================================
+   EFECTO CRISTAL (GLASSMORPHISM) PARA TARJETAS
+   ========================================= */
 .stat-card {
     position: absolute;
     display: flex;
@@ -544,6 +544,42 @@ img.ajuste-leonardo {
     width: 19%; 
     height: 32%; 
     padding: 2%; 
+    
+    /* 1. Fondo semi-transparente muy sutil */
+    background: rgba(255, 255, 255, 0.03); 
+    
+    /* 2. El desenfoque del cristal (blur) sobre el video */
+    backdrop-filter: blur(10px); 
+    -webkit-backdrop-filter: blur(10px); /* Soporte para navegadores Safari */
+    
+    /* 3. Borde fino y brilloso para delimitar el cuadro */
+    border: 1px solid rgba(255, 255, 255, 0.15); 
+    
+    /* 4. Esquinas redondeadas y sombra de profundidad */
+    border-radius: 16px; 
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3); 
+    
+    overflow: hidden; /* Mantiene los elementos internos dentro del radio */
+}
+
+/* El pequeño círculo decorativo en la esquina superior izquierda */
+.stat-card::before {
+    content: '';
+    position: absolute;
+    top: 33px;
+    left: 42px; 
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.07); /* Círculo casi imperceptible */
+    pointer-events: none; /* Evita que estorbe al hacer clic */
+    z-index: 0;
+}
+
+/* Asegurar que el contenido (iconos y texto) resalte por encima del cristal */
+.card-top-row, .text-box {
+    position: relative;
+    z-index: 1;
 }
 
 /*FILA SUPERIOR */
@@ -630,7 +666,7 @@ img.ajuste-leonardo {
     left: 78.1%;
 }
 
-/* SECCIÓN NUESTROS CIRCUITOS*/
+
 .circuitos-section {
     max-width: 1200px; 
     margin: 80px auto 60px auto; 
@@ -641,7 +677,7 @@ img.ajuste-leonardo {
 /*  Encabezado  */
 .circuitos-header {
     text-align: left;
-    margin-left: -120px; /* ⬅️ Modifica este número. Mientras más negativo, más a la izquierda se moverá */
+    margin-left: -120px; 
     margin-top: -60px;
 }
 
@@ -671,7 +707,6 @@ img.ajuste-leonardo {
     font-weight: 600;
 }
 
-/* Contenido de Filas  */
 .circuitos-content {
     display: flex;
     flex-direction: column;
@@ -705,7 +740,6 @@ img.ajuste-leonardo {
     display: block;
 }
 
-/* Caja de los textos negros */
 .circuit-info {
     flex: 1; 
     padding: 40px 0px;
@@ -746,14 +780,13 @@ img.ajuste-leonardo {
     margin-left: 10px;
 }
 
-
 .circuit-info .btn-ver-mas {
     border: 2px solid #b87333; 
     padding: 8px 20px;
     font-size: 0.95rem;
     margin-left: 10px;
 }
-/*SECCIÓN COCKPITS */
+
 .cockpit-section {
     width: 100%;
     background-color: #ffffff; 
@@ -763,7 +796,6 @@ img.ajuste-leonardo {
     position: relative;
 }
 
-/* Textos Centrados */
 .cockpit-container {
     max-width: 1000px; 
     margin: 0 auto;
@@ -786,7 +818,6 @@ img.ajuste-leonardo {
     font-weight: 400;
 }
 
-/* Botón Sólido */
 .btn-partner {
     display: inline-block;
     background-color: #b87333; 
@@ -808,7 +839,6 @@ img.ajuste-leonardo {
     color: #ffffff;
 }
 
-/* Imagen */
 .cockpit-image-wrapper {
     position: relative;
     max-width: 1450px; 
@@ -830,7 +860,7 @@ img.ajuste-leonardo {
     background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%);
     pointer-events: none; 
 }
-/* FOOTER */
+
 .site-footer {
     background-color: #0d0d0d; 
     background-size: cover;
@@ -853,7 +883,6 @@ img.ajuste-leonardo {
     min-width: 220px;
 }
 
-/*Títulos e Información*/
 .footer-logo {
     max-width: 200px;
     margin-bottom: 30px;
@@ -880,7 +909,6 @@ img.ajuste-leonardo {
     letter-spacing: 0.5px;
 }
 
-/* Redes Sociales */
 .social-icons {
     display: flex;
     gap: 12px;
@@ -910,7 +938,6 @@ img.ajuste-leonardo {
     flex-direction: column;
 }
 
-/* Cabecera */
 .accordion-header {
     display: flex;
     justify-content: space-between;
@@ -943,7 +970,6 @@ img.ajuste-leonardo {
     transition: all 0.4s ease;
 }
 
-/* ESTADOS ACTIVOS */
 .accordion-item.active .accordion-header {
     border-bottom: 1px solid transparent;
 }
@@ -981,17 +1007,149 @@ img.ajuste-leonardo {
     letter-spacing: 1px;
 }
 
-/* TEMPORAL VISTA PARA CELULARES*/
-@media (max-width: 768px) {
-    .nav-links {
-        display: none; /* Se oculta para dar paso a un menú desplegable o limpiar la vista */
-    }
-    .navbar {
-        padding: 15px;
-        justify-content: space-between;
-    }
+.hamburger {
+    display: none; 
+    cursor: pointer;
+    flex-direction: column;
+    gap: 5px;
+    z-index: 10000; 
 }
+
+.hamburger .bar {
+    width: 25px;
+    height: 3px;
+    background-color: #888888;
+    border-radius: 3px;
+    transition: all 0.3s ease; 
+}
+
 @media (max-width: 768px) {
+    html, body {
+        overflow-x: hidden;
+        width: 100%;
+    }
+
+    .hero-section {
+        background-image: url('../assets/img/movil.png'); 
+        background-size: cover; 
+        background-position: center; 
+    }
+
+
+    .navbar {
+        flex-direction: column; 
+        padding: 10px 15px;
+        width: 95%;
+        border-radius: 20px; 
+        gap: 12px; 
+        left: 2.5%; 
+        transform: none; 
+    }
+   
+    .nav-icons {
+        display: flex !important; 
+        position: absolute; 
+        top: 14px; 
+        right: 0px; 
+        margin-left: 0; 
+        gap: 0px; 
+    }
+    .nav-icons .icon-link {
+        margin-left: -5px; 
+    }
+    
+    .nav-icons .icon-link:first-child {
+        margin-left: 0; 
+    }
+    
+    .nav-icons img.nav-icon-img {
+        width: 18px; 
+        height: 18px;
+    }
+
+    .logo {
+        flex: none;
+        margin: 0 auto; 
+    }
+    .logo img {
+        height: 28px; 
+        width: auto;
+    }
+
+    .hamburger, 
+    .nav-indicator {
+        display: none !important;
+    }
+
+    .nav-links {
+        display: flex !important; 
+        flex-direction: row; 
+        position: relative;
+        width: 100%;
+        height: auto;
+        background: transparent;
+        padding: 0;
+        box-shadow: none;
+        gap: 3px; 
+        top: 0; right: 40px;
+    }
+
+    .nav-links a {
+        flex: 1; 
+        font-size: 0.75rem; 
+        text-align: center;
+        padding: 8px 0;
+        margin: 0;
+        border-radius: 25px; 
+        background-color: rgba(0, 0, 0, 0.05); 
+        color: #888888;
+        font-weight: 600;
+        border-bottom: none; 
+        overflow: hidden; 
+        white-space: nowrap; 
+        transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); 
+    }
+
+    .nav-links a.active {
+        flex: 1.5; 
+        background-color: #b87333; 
+        color: #ffffff; 
+        font-size: 0.85rem; 
+    }
+    
+    .hero-container {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 120px 20px 40px 20px; 
+        height: auto;
+        min-height: 100vh;
+        gap: 40px;
+    }
+    .hero-content {
+        max-width: 100%;
+        margin-left: 0;
+        top: 0;
+        text-align: center;
+    }
+    .hero-content h1 {
+        font-size: 2.5rem;
+        margin-bottom: 15px;
+        
+    }
+    
+    .hero-content p {
+        font-size: 1rem;
+        color: #f8f8f8;
+    }
+
+    .leaderboard-widget {
+        transform: none; 
+        width: 100%;
+        max-width: 380px; 
+        padding: 25px;
+        margin: 0;
+    }
     .leaderboard-list {
         display: flex;
         flex-direction: column;
@@ -999,99 +1157,111 @@ img.ajuste-leonardo {
     }
     .leaderboard-item {
         width: 100%;
-        background-color: #ffffff;
-        color: #000000;
-        border: 2px solid #000000; /* Contraste absoluto */
     }
-    .driver-banner {
-        /* Ajustar el tamaño de las fuentes y fotos para móvil */
-        font-size: 14px;
+
+    .nosotros-section {
+        aspect-ratio: auto; 
+        padding: 40px 20px;
+        min-height: auto;
     }
-}
-@media (max-width: 768px) {
+    .nosotros-header {
+        position: relative; 
+        top: 0; left: 0;
+        width: 100%;
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    .nosotros-header p {
+        font-size: 1rem !important;
+    }
     .stats-grid {
+        position: relative; 
         display: grid;
-        grid-template-columns: 1fr; /* Una sola columna apilada */
+        grid-template-columns: 1fr; 
         gap: 20px;
-        padding: 20px;
+        padding: 0;
     }
     .stat-card {
-        border-bottom: 3px solid #000000;
-        padding-bottom: 15px;
-    }
-}
-@media (max-width: 768px) {
-    .circuit-row {
-        display: flex;
-        flex-direction: column !important; 
-        text-align: center;
-    }
-    .circuit-img img {
+        position: relative; 
         width: 100%;
         height: auto;
+        min-height: 150px;
+        top: auto !important; 
+        left: auto !important;
+        padding: 20px;
+        border-bottom: 3px solid rgba(255,255,255,0.1);
+    }
+    .stat-card::before {
+    top: 18px;
+    left: 26px; 
+    width: 45px;
+    height: 45px;
+   
+}
+    .number-box h2 {
+        font-size: 3rem; 
+    }
+
+    .circuitos-section {
+        margin: 60px auto 40px auto;
+        padding: 0 15px;
+    }
+    .circuitos-header {
+        margin-left: 0; 
+        margin-top: 0;
+        text-align: center;
+    }
+    .circuit-row {
+        width: 100%;
+        left: 0; right: 0;
+        margin-left: 0; 
+        margin-right: 0;
+        flex-direction: column !important;
     }
     .circuit-info {
-        padding: 20px 0;
+        padding: 30px 20px;
+        align-items: center;
+        text-align: center;
     }
-}
-@media (max-width: 768px) {
+    .circuit-info h3, 
+    .circuit-info h4, 
+    .circuit-info p, 
+    .circuit-info .btn-ver-mas {
+        margin-left: 0; 
+    }
+    .circuit-info p {
+        max-width: 100%;
+    }
+
+    .cockpit-title {
+        font-size: 2rem;
+    }
+    .btn-partner {
+        padding: 15px 30px;
+        font-size: 0.9rem;
+    }
+
     .footer-container {
-        display: flex;
         flex-direction: column;
-        gap: 30px;
+        gap: 40px;
+        text-align: center;
     }
     .footer-col {
         width: 100%;
-        border-top: 2px solid #000000;
+        min-width: 100%;
         padding-top: 15px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1); 
+    }
+    .footer-logo {
+        margin: 0 auto 20px auto; 
+    }
+    .social-icons {
+        justify-content: center; 
+    }
+    .footer-bottom {
+        flex-direction: column;
+        text-align: center;
+        gap: 15px;
     }
 }
-/* =========================================
-   CORRECCIONES MÓVILES (Max 768px)
-   ========================================= */
-@media (max-width: 768px) {
     
-    /* 1. Evitar que la página haga scroll hacia los lados */
-    html, body {
-        overflow-x: hidden;
-        width: 100%;
-    }
-
-    /* 2. Apilar el texto y el tablero verticalmente */
-    .hero-container {
-        display: flex;
-        flex-direction: column; /* La magia ocurre aquí: de fila a columna */
-        align-items: center;
-        justify-content: center;
-        padding: 20px;
-        gap: 40px; /* Espacio de respiro entre el texto y el tablero */
-    }
-
-    /* 3. Ajustar el texto principal para que no se corte */
-    .hero-content {
-        width: 100%;
-        text-align: center; /* Centrado se ve mucho más profesional en móvil */
-    }
-
-    .hero-content h1 {
-        font-size: 2.2rem; /* Reducimos el tamaño de la letra gigante */
-        line-height: 1.2;
-    }
-
-    /* 4. Enmarcar el tablero para que respete los bordes de la pantalla */
-    .leaderboard-widget {
-        width: 100%;
-        max-width: 350px; /* Evita que crezca demasiado en tablets pequeñas */
-        margin: 0 auto;
-        box-sizing: border-box;
-    }
-
-    /* 5. Arreglar el bloque de "NOSOTROS" que se ve aplastado */
-    .nosotros-section {
-        padding: 40px 20px;
-    }
-    
-    .nosotros-header p {
-        font-size: 16px !important; /* Texto un poco más pequeño para lectura ágil */
-    }
-}
