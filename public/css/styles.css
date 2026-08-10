@@ -129,20 +129,22 @@ body {
 }
 
 /*  HERO SECTION */
-    .hero-section {
-        position: relative;
-        width: 100%;
-        min-height: 100vh; 
-        background-image: url('../assets/img/Slideshow_01_fondo.png');
-        background-size: 100% auto; 
-        background-position: 0% 100%; 
-        background-size: 100% 100%;
-        background-repeat: no-repeat;
-        background-color: #ffffff;  
-        display: flex;
-        margin-top: 80px;
-        align-items: center;
-    }
+    /*  HERO SECTION */
+.hero-section {
+    position: relative;
+    width: 100%;
+    min-height: 100vh; 
+    background-image: url('../assets/img/Slideshow_01_fondo.png');
+    
+    /* ELIMINAMOS EL 100% 100% QUE DEFORMA LA IMAGEN */
+    background-size: cover; /* Esto hace que la imagen crezca proporcionalmente sin aplastarse */
+    background-position: center bottom; /* Centra el enfoque de la foto */
+    background-repeat: no-repeat;
+    background-color: #ffffff;  
+    display: flex;
+    margin-top: 80px;
+    align-items: center;
+}
 
 /* ANIMACIONES */
 @keyframes fadeInUp {
@@ -177,7 +179,10 @@ body {
 .hero-container {
     position: relative;
     z-index: 2;
-    max-width: 1200px;
+    
+    /* IGUALAMOS EL ANCHO CON EL NAVBAR (De 1200px a 1420px) */
+    max-width: 1420px; 
+    
     width: 100%;
     margin: 0 auto;
     padding: 0 40px;
@@ -222,15 +227,25 @@ body {
 
 /*Widget de Posiciones*/
     .leaderboard-widget {
-        background: rgba(187, 187, 187, 0.95);
-        border-radius: 29px;
-        padding: 42px;
-        width: 438px;
-        color: #000;
-        transform: translate(142px, 103px); 
-        box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
-        font-family: 'Montserrat', sans-serif;
-    }
+    background: rgba(187, 187, 187, 0.95);
+    border-radius: 29px;
+    padding: 58px; /* Reducimos ligeramente para que los elementos internos respiren mejor */
+    width: 100%; 
+    max-width: 443px; 
+    color: #000;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+    font-family: 'Montserrat', sans-serif;
+    
+    /* ELIMINAMOS EL MARGEN NEGATIVO */
+    margin-right: -35px; 
+    
+    /* CONTROL VERTICAL */
+    position: relative;
+    top: 100px; /* Ajústalo hacia arriba o abajo sin miedo a romper los lados */
+    
+    /* Evita que la caja se comprima de forma extraña en laptops pequeñas */
+    flex-shrink: 0; 
+}
 
 .leaderboard-header h3 {
     background-color: #b87333;
