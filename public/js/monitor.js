@@ -12,20 +12,6 @@ function togglePantallaCompleta() {
     }
 }
 
-document.addEventListener('keydown', function(event) {
-    if (event.key === "Escape") {
-        const contenedorTablero = document.getElementById('contenedor-tablero');
-        const icono = document.getElementById('icono-expandir');
-        
-        if (contenedorTablero.classList.contains('fullscreen-mode')) {
-            contenedorTablero.classList.remove('fullscreen-mode');
-            icono.classList.remove('fa-compress');
-            icono.classList.add('fa-expand');
-        }
-    }
-});
-
-
 async function actualizarListasPits() {
     try {
         const respuesta = await fetch('/api/monitor-pits');
@@ -78,4 +64,28 @@ document.addEventListener('keydown', function(event) {
             icono.classList.add('fa-expand');
         }
     }
+});
+
+
+
+
+// =========================================
+// 1. PANTALLA DE CARGA (PRELOADER)
+// =========================================
+const minLoadingTime = 3000; // 3 segundos garantizados
+const startTime = Date.now();
+
+window.addEventListener('load', () => {
+    const preloader = document.getElementById('preloader');
+    if (!preloader) return;
+
+    const elapsedTime = Date.now() - startTime;
+    const timeToWait = Math.max(0, minLoadingTime - elapsedTime);
+
+    setTimeout(() => {
+        preloader.style.opacity = '0';
+        setTimeout(() => {
+            preloader.style.visibility = 'hidden';
+        }, 800); 
+    }, timeToWait);
 });

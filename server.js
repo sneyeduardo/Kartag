@@ -1,5 +1,5 @@
 const express = require('express');
-const sql = require('mssql');
+const mysql = require('mysql2/promise'); // Nuevo driver para MariaDB
 const path = require('path');
 const cors = require('cors');
 
@@ -7,36 +7,40 @@ const app = express();
 const PORT = 3000;
 
 app.use(cors());
-app.use(express.json()); 
+app.use(express.json({ limit: '10mb' })); 
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-const dbConfig = {
-    user: 'sa',               
-    password: 'Password123',
-    server: 'localhost',      
-    database: 'KartingDB',
-    options: {
-        encrypt: false, 
-        trustServerCertificate: true
-    }
-};
+// ==========================================
+// CONFIGURACIÓN DE CONEXIÓN A MARIADB
+// ==========================================
+const pool = mysql.createPool({
+    host: 'localhost',
+    user: 'root', // Cambia esto si tu usuario en DBeaver/MariaDB es distinto
+    password: 'a-32001919', // Pon la contraseña de tu base de datos local
+    database: 'KartingDB', 
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0
+});
 
+// ==========================================
+// ENDPOINTS DEL TABLERO PRINCIPAL
+// ==========================================
 app.get('/api/tablero', async (req, res) => {
     try {
-        let pool = await sql.connect(dbConfig);
-
-        let checkCarrera = await pool.request().query(`
-            SELECT TOP 1 Id FROM Carreras WHERE Estado = 'En Curso' ORDER BY Id DESC
+        const [checkCarrera] = await pool.query(`
+            SELECT Id FROM Carreras WHERE Estado = 'En Curso' ORDER BY Id DESC LIMIT 1
         `);
 
-        if (checkCarrera.recordset.length > 0) {                       
-            
-            let result = await pool.request().query(`
+        if (checkCarrera.length > 0) {                       
+            // Modo Carrera (Traducción de T-SQL a MariaDB)
+            const [result] = await pool.query(`
                 WITH CarreraActiva AS (
-                    SELECT TOP 1 Id FROM Carreras WHERE Estado = 'En Curso' ORDER BY Id DESC
+                    SELECT Id FROM Carreras WHERE Estado = 'En Curso' ORDER BY Id DESC LIMIT 1
                 ),
                 UltimosPilotos AS (
-                    SELECT TOP 6 Id, alias FROM Clientes ORDER BY Id DESC
+                    SELECT Id, alias FROM Clientes ORDER BY Id DESC LIMIT 6
                 ),
                 CTE_UltimaVuelta AS (
                     SELECT ClienteId, CarritoId, TiempoVuelta AS ultima_vuelta,
@@ -44,11 +48,11 @@ app.get('/api/tablero', async (req, res) => {
                     FROM Vueltas WHERE CarreraId = (SELECT Id FROM CarreraActiva)
                 )
                 SELECT 
-                    ISNULL(c.alias, 'Piloto') AS nombre_piloto,
+                    IFNULL(c.alias, 'Piloto') AS nombre_piloto,
                     COUNT(v.Id) AS vueltas_completadas,
-                    ISNULL(CONVERT(varchar, uv.CarritoId), '-') AS numero_kart,
-                    ISNULL(RIGHT(CONVERT(varchar, uv.ultima_vuelta, 121), 9), '00:00.000') AS ultima_vuelta,
-                    ISNULL(RIGHT(CONVERT(varchar, MIN(v.TiempoVuelta), 121), 9), '00:00.000') AS mejor_vuelta
+                    IFNULL(CAST(uv.CarritoId AS CHAR), '-') AS numero_kart,
+                    IFNULL(uv.ultima_vuelta, '00:00.000') AS ultima_vuelta,
+                    IFNULL(MIN(v.TiempoVuelta), '00:00.000') AS mejor_vuelta
                 FROM UltimosPilotos c
                 LEFT JOIN Vueltas v ON c.Id = v.ClienteId AND v.CarreraId = (SELECT Id FROM CarreraActiva)
                 LEFT JOIN CTE_UltimaVuelta uv ON c.Id = uv.ClienteId AND uv.fila = 1
@@ -58,91 +62,97 @@ app.get('/api/tablero', async (req, res) => {
                     MIN(v.TiempoVuelta) ASC;
             `);
             
-            res.json({ status: 'success', modo: 'carrera', data: result.recordset });
+            res.json({ status: 'success', modo: 'carrera', data: result });
 
         } else {            
-        
-            let topSemana = await pool.request().query(`
-                SELECT TOP 3 
-                    c.alias AS nombre_piloto, 
-                    RIGHT(CONVERT(varchar, MIN(v.TiempoVuelta), 121), 9) AS mejor_vuelta
+            // Modo Reposo (Uso de DATE_SUB y LIMIT de MariaDB)
+            const [topSemana] = await pool.query(`
+                SELECT c.alias AS nombre_piloto, MIN(v.TiempoVuelta) AS mejor_vuelta
                 FROM Vueltas v
                 INNER JOIN Clientes c ON v.ClienteId = c.Id
-                WHERE v.FechaRegistro >= DATEADD(day, -7, GETDATE())
+                WHERE v.FechaRegistro >= DATE_SUB(NOW(), INTERVAL 7 DAY)
                 GROUP BY c.alias
-                ORDER BY MIN(v.TiempoVuelta) ASC;
+                ORDER BY mejor_vuelta ASC LIMIT 3;
             `);
 
-            
-            let topMes = await pool.request().query(`
-                SELECT TOP 3 
-                    c.alias AS nombre_piloto, 
-                    RIGHT(CONVERT(varchar, MIN(v.TiempoVuelta), 121), 9) AS mejor_vuelta
+            const [topMes] = await pool.query(`
+                SELECT c.alias AS nombre_piloto, MIN(v.TiempoVuelta) AS mejor_vuelta
                 FROM Vueltas v
                 INNER JOIN Clientes c ON v.ClienteId = c.Id
-                WHERE v.FechaRegistro >= DATEADD(day, -30, GETDATE())
+                WHERE v.FechaRegistro >= DATE_SUB(NOW(), INTERVAL 30 DAY)
                 GROUP BY c.alias
-                ORDER BY MIN(v.TiempoVuelta) ASC;
+                ORDER BY mejor_vuelta ASC LIMIT 3;
             `);
 
             res.json({ 
                 status: 'success', 
                 modo: 'reposo', 
-                semana: topSemana.recordset, 
-                mes: topMes.recordset 
+                semana: topSemana, 
+                mes: topMes 
             });
         }
-
     } catch (err) {
         console.error("Error Tablero:", err);
         res.status(500).json({ status: 'error', mensaje: err.message });
     }
 });
 
-app.use(express.json({ limit: '10mb' })); 
+// ==========================================
+// NUEVO ENDPOINT: TOP PILOTOS PARA EL CARRUSEL
+// ==========================================
+app.get('/api/top-pilotos', async (req, res) => {
+    try {
+        // Busca los 3 mejores tiempos históricos usando tus tablas reales
+        const [topPilotos] = await pool.query(`
+            SELECT 
+                c.alias AS nombre_piloto, 
+                c.foto AS foto_url,
+                MIN(v.TiempoVuelta) AS mejor_tiempo
+            FROM Vueltas v
+            INNER JOIN Clientes c ON v.ClienteId = c.Id
+            GROUP BY c.Id, c.alias, c.foto
+            ORDER BY mejor_tiempo ASC
+            LIMIT 3;
+        `);
 
+        res.json({ status: 'success', data: topPilotos });
+    } catch (err) {
+        console.error('Error Top Pilotos:', err);
+        res.status(500).json({ status: 'error', mensaje: 'Error interno del servidor' });
+    }
+});
+
+// ==========================================
+// REGISTRO DE CLIENTES
+// ==========================================
 app.post('/api/registro-paso1', async (req, res) => {
     try {
         const { email, cedula, pasaporte, fechaNacimiento } = req.body;
-        let pool = await sql.connect(dbConfig);
+        let documentoIdentidad = (pasaporte && pasaporte.trim() !== '') ? pasaporte : cedula;
         
-        let documentoIdentidad = cedula;
-        if (pasaporte && pasaporte.trim() !== '') {
-            documentoIdentidad = pasaporte;
-        }
-        let checkDuplicado = await pool.request()
-            .input('email', sql.VarChar, email)
-            .input('documento', sql.NVarChar, documentoIdentidad)
-            .query(`
-                SELECT Id FROM Clientes 
-                WHERE Email = @email OR cedula_pasaporte = @documento
-            `);
-        if (checkDuplicado.recordset.length > 0) {
-            return res.json({ 
-                status: 'error', 
-                mensaje: 'Este correo electrónico o documento de identidad ya está registrado.' 
-            });
-        }
-        let result = await pool.request()
-            .input('email', sql.VarChar, email)
-            .input('fecha_nacimiento', sql.Date, fechaNacimiento)
-            .input('cedula_pasaporte', sql.NVarChar, documentoIdentidad)
-            .query(`
-                INSERT INTO Clientes 
-                (Email, FechaRegistro, fecha_nacimiento, cedula_pasaporte)
-                OUTPUT INSERTED.Id
-                VALUES 
-                (@email, GETDATE(), @fecha_nacimiento, @cedula_pasaporte)
-            `);
+        // Uso de placeholders (?) para prevenir SQL Injection en MariaDB
+        const [checkDuplicado] = await pool.query(
+            `SELECT Id FROM Clientes WHERE Email = ? OR cedula_pasaporte = ?`,
+            [email, documentoIdentidad]
+        );
 
-        res.json({ status: 'success', clienteId: result.recordset[0].Id });
+        if (checkDuplicado.length > 0) {
+            return res.json({ status: 'error', mensaje: 'Este correo electrónico o documento de identidad ya está registrado.' });
+        }
+
+        const [result] = await pool.query(
+            `INSERT INTO Clientes (Email, FechaRegistro, fecha_nacimiento, cedula_pasaporte) VALUES (?, NOW(), ?, ?)`,
+            [email, fechaNacimiento, documentoIdentidad]
+        );
+
+        // En MariaDB/MySQL usamos insertId en lugar de OUTPUT INSERTED.Id
+        res.json({ status: 'success', clienteId: result.insertId });
         
     } catch (err) {
         console.error("Error Paso 1:", err);
-        if (err.message.includes('UNIQUE KEY constraint')) {
+        if (err.code === 'ER_DUP_ENTRY') {
             return res.json({ status: 'error', mensaje: 'Dato duplicado: El correo o documento ya existe.' });
         }
-        
         res.status(500).json({ status: 'error', mensaje: err.message });
     }
 });
@@ -150,29 +160,11 @@ app.post('/api/registro-paso1', async (req, res) => {
 app.post('/api/registro-paso2', async (req, res) => {
     try {
         const { clienteId, nombre, apellido, alias, sexo, pais, telefono } = req.body;
-        let pool = await sql.connect(dbConfig);
-        
-        await pool.request()
-            .input('id', sql.Int, clienteId)
-            .input('nombre', sql.NVarChar, nombre)
-            .input('apellido', sql.NVarChar, apellido)
-            .input('alias', sql.NVarChar, alias)
-            .input('sexo', sql.NVarChar, sexo)
-            .input('pais', sql.NVarChar, pais)
-            .input('telefono', sql.NVarChar, telefono)
-            .query(`
-                UPDATE Clientes 
-                SET nombre = @nombre, 
-                    apellido = @apellido, 
-                    alias = @alias, 
-                    sexo = @sexo, 
-                    pais = @pais, 
-                    telefono = @telefono
-                WHERE Id = @id
-            `);
-
+        await pool.query(
+            `UPDATE Clientes SET nombre = ?, apellido = ?, alias = ?, sexo = ?, pais = ?, telefono = ? WHERE Id = ?`,
+            [nombre, apellido, alias, sexo, pais, telefono, clienteId]
+        );
         res.json({ status: 'success' });
-        
     } catch (err) {
         console.error("Error Paso 2:", err);
         res.status(500).json({ status: 'error', mensaje: err.message });
@@ -182,35 +174,24 @@ app.post('/api/registro-paso2', async (req, res) => {
 app.post('/api/registro-paso3-foto', async (req, res) => {
     try {
         const { clienteId, foto } = req.body; 
-        let pool = await sql.connect(dbConfig);
-        await pool.request()
-            .input('id', sql.Int, clienteId)
-            .input('foto', sql.VarChar(sql.MAX), foto)
-            .query(`
-                UPDATE Clientes 
-                SET foto = @foto
-                WHERE Id = @id
-            `);
-
+        await pool.query(`UPDATE Clientes SET foto = ? WHERE Id = ?`, [foto, clienteId]);
         res.json({ status: 'success' });
-        
     } catch (err) {
         console.error("Error Paso 3 (Foto):", err);
         res.status(500).json({ status: 'error', mensaje: err.message });
     }
 });
 
+// ==========================================
+// GESTIÓN DE CARRERAS Y VUELTAS
+// ==========================================
 app.post('/api/iniciar-carrera', async (req, res) => {
     try {
-        let pool = await sql.connect(dbConfig);
-        
-        await pool.request().query(`UPDATE Carreras SET Estado = 'Finalizada' WHERE Estado = 'En Curso'`);
-        
-        await pool.request().query(`
+        await pool.query(`UPDATE Carreras SET Estado = 'Finalizada' WHERE Estado = 'En Curso'`);
+        await pool.query(`
             INSERT INTO Carreras (NumeroCarreraDiaria, FechaProgramada, HoraInicioReal, Estado)
-            VALUES (1, GETDATE(), GETDATE(), 'En Curso')
+            VALUES (1, NOW(), NOW(), 'En Curso')
         `);
-
         res.json({ status: 'success' });
     } catch (err) {
         console.error("Error Carrera:", err);
@@ -220,15 +201,7 @@ app.post('/api/iniciar-carrera', async (req, res) => {
 
 app.post('/api/finalizar-carrera', async (req, res) => {
     try {
-        let pool = await sql.connect(dbConfig);
-        
-        
-        await pool.request().query(`
-            UPDATE Carreras 
-            SET Estado = 'Finalizada' 
-            WHERE Estado = 'En Curso'
-        `);
-
+        await pool.query(`UPDATE Carreras SET Estado = 'Finalizada' WHERE Estado = 'En Curso'`);
         res.json({ status: 'success' });
     } catch (err) {
         console.error("Error finalizando carrera:", err);
@@ -239,76 +212,54 @@ app.post('/api/finalizar-carrera', async (req, res) => {
 app.post('/api/registrar-vuelta', async (req, res) => {
     try {
         const { clienteId, carritoId, numeroVuelta, tiempoVuelta } = req.body;
-        let pool = await sql.connect(dbConfig);
+        const [carreraQuery] = await pool.query(`SELECT Id FROM Carreras WHERE Estado = 'En Curso' ORDER BY Id DESC LIMIT 1`);
         
-        let carreraQuery = await pool.request().query(`
-            SELECT TOP 1 Id FROM Carreras WHERE Estado = 'En Curso' ORDER BY Id DESC
-        `);
-        
-        if (carreraQuery.recordset.length === 0) {
+        if (carreraQuery.length === 0) {
             return res.status(400).json({ status: 'error', mensaje: 'No hay carrera En Curso' });
         }
         
-        let carreraIdActiva = carreraQuery.recordset[0].Id;
+        let carreraIdActiva = carreraQuery[0].Id;
 
-        await pool.request()
-            .input('carreraId', sql.Int, carreraIdActiva)
-            .input('clienteId', sql.Int, clienteId)
-            .input('carritoId', sql.Int, carritoId)
-            .input('numeroVuelta', sql.Int, numeroVuelta)
-            .input('tiempoVuelta', sql.VarChar, tiempoVuelta) 
-            .query(`
-                INSERT INTO Vueltas (CarreraId, ClienteId, CarritoId, NumeroVuelta, TiempoVuelta, FechaRegistro) 
-                VALUES (@carreraId, @clienteId, @carritoId, @numeroVuelta, @tiempoVuelta, GETDATE())
-            `);
+        await pool.query(
+            `INSERT INTO Vueltas (CarreraId, ClienteId, CarritoId, NumeroVuelta, TiempoVuelta, FechaRegistro) 
+             VALUES (?, ?, ?, ?, ?, NOW())`,
+            [carreraIdActiva, clienteId, carritoId, numeroVuelta, tiempoVuelta]
+        );
 
         res.json({ status: 'success' });
-        
     } catch (err) {
         console.error("Error Vueltas:", err);
         res.status(500).json({ status: 'error', mensaje: err.message });
     }
 });
 
+// ==========================================
+// MONITOR Y DASHBOARD
+// ==========================================
 app.get('/api/monitor-pits', async (req, res) => {
     try {
-        let pool = await sql.connect(dbConfig);
-        let salientes = await pool.request().query(`
-            SELECT DISTINCT c.alias, ISNULL(CONVERT(varchar, v.CarritoId), '-') as kart
+        const [salientes] = await pool.query(`
+            SELECT DISTINCT c.alias, IFNULL(CAST(v.CarritoId AS CHAR), '-') as kart
             FROM Vueltas v
             INNER JOIN Clientes c ON v.ClienteId = c.Id
-            WHERE v.CarreraId = (
-                SELECT TOP 1 Id FROM Carreras WHERE Estado = 'Finalizada' ORDER BY Id DESC
-            )
+            WHERE v.CarreraId = (SELECT Id FROM Carreras WHERE Estado = 'Finalizada' ORDER BY Id DESC LIMIT 1)
         `);
-        let en_pista = await pool.request().query(`
-            SELECT DISTINCT c.alias, ISNULL(CONVERT(varchar, v.CarritoId), '-') as kart
-            FROM Vueltas v
-            INNER JOIN Clientes c ON v.ClienteId = c.Id
-            WHERE v.CarreraId = (
-                SELECT TOP 1 Id FROM Carreras WHERE Estado = 'En Curso' ORDER BY Id DESC
-            )
-        `);
-        let proximos = await pool.request().query(`
-            SELECT TOP 6 alias, '-' as kart
-            FROM Clientes 
-            ORDER BY Id DESC
-        `);
-
-        res.json({ 
-            status: 'success', 
-            salientes: salientes.recordset,
-            en_pista: en_pista.recordset,
-            proximos: proximos.recordset
-        });
         
+        const [en_pista] = await pool.query(`
+            SELECT DISTINCT c.alias, IFNULL(CAST(v.CarritoId AS CHAR), '-') as kart
+            FROM Vueltas v
+            INNER JOIN Clientes c ON v.ClienteId = c.Id
+            WHERE v.CarreraId = (SELECT Id FROM Carreras WHERE Estado = 'En Curso' ORDER BY Id DESC LIMIT 1)
+        `);
+        
+        const [proximos] = await pool.query(`SELECT alias, '-' as kart FROM Clientes ORDER BY Id DESC LIMIT 6`);
+
+        res.json({ status: 'success', salientes, en_pista, proximos });
     } catch (err) {
         console.error("Error Monitor Pits:", err);
         res.status(500).json({ status: 'error', mensaje: err.message });
     }
 });
-
-app.use(express.urlencoded({ extended: true }));
 
 app.post('/dashboard', async (req, res) => {
     try {
@@ -323,19 +274,9 @@ app.post('/dashboard', async (req, res) => {
             `);
         }
 
-        let pool = await sql.connect(dbConfig);
-        
-        // 2. Consulta a la base de datos
-        let checkUser = await pool.request()
-            .input('user', sql.VarChar, username)
-            .input('pass', sql.VarChar, password)
-            .query(`
-                SELECT Id 
-                FROM Usuarios 
-                WHERE Username = @user AND Password = @pass
-            `);
+        const [checkUser] = await pool.query(`SELECT Id FROM Usuarios WHERE Username = ? AND Password = ?`, [username, password]);
 
-        if (checkUser.recordset.length > 0) {
+        if (checkUser.length > 0) {
             res.redirect('/monitor.html');
         } else {
             res.send(`
@@ -346,12 +287,12 @@ app.post('/dashboard', async (req, res) => {
                 </div>
             `);
         }
-        
     } catch (err) {
         console.error("Error en Login:", err);
         res.status(500).send("Error interno al conectarse a la base de datos");
     }
 });
+
 app.listen(PORT, () => {
-    console.log(`🚀 Servidor Node.js corriendo en http://localhost:${PORT}`);
+    console.log(`🚀 Servidor Node.js (MariaDB) corriendo en http://localhost:${PORT}`);
 });

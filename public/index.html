@@ -6,220 +6,138 @@
     <title>KARTAG | Siente la adrenalina</title>
     
     <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/styles.css?v=2">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- PANTALLA DE CARGA KARTAG -->
+    
 
     <!-- Navbar -->
 <header class="navbar">
-    <div class="logo">
-        <img src="assets/img/logo.png" alt="Kartag RC">
-    </div>
-    
-    <div class="nav-links">
-        <a href="#inicio" class="active">Inicio</a>
-        <a href="#nosotros">Nosotros</a>
-        <a href="#descubrir">Descubrir</a>
-        <a href="#modelos">Modelos</a>
-        <div class="nav-indicator"></div>
-    </div>
-    
-    <div class="nav-icons">
-        <a href="#" class="icon-link">
-            <img src="assets/img/preguntas.png" alt="Ayuda" class="nav-icon-img">
-        </a>
-        <a href="#" class="icon-link">
-            <img src="assets/img/ubicacion.png" alt="Ayuda" class="nav-icon-img">
-        </a>
-        <a href="login.html" class="icon-link">
-            <img src="assets/img/usuario.png" alt="Ayuda" class="nav-icon-img">
-        </a>
-    </div>
+        <div class="logo">
+            <img src="assets/img/logo.png" alt="Kartag RC">
+        </div>
+        
+        <div class="nav-links">
+            <a href="#inicio" class="active">Inicio</a>
+            <a href="#nosotros">Nosotros</a>
+            <a href="#descubrir">Descubrir</a>
+            <a href="#modelos">Modelos</a>
+            <div class="nav-indicator"></div>
+        </div>
+        
+        <div class="nav-icons">
+            <a href="#" class="icon-link">
+                <img src="assets/img/preguntas.png" alt="Ayuda" class="nav-icon-img">
+            </a>
+            <a href="#" class="icon-link">
+                <img src="assets/img/ubicacion.png" alt="Ayuda" class="nav-icon-img">
+            </a>
+            <a href="login.html" class="icon-link">
+                <img src="assets/img/usuario.png" alt="Ayuda" class="nav-icon-img">
+            </a>
+        </div>
 
-    <!-- AQUÍ VA EL BOTÓN HAMBURGUESA -->
-    <div class="hamburger">
-        <span class="bar"></span>
-        <span class="bar"></span>
-        <span class="bar"></span>
-    </div>
-</header>
+    </header>
 
     <main>
         <!-- Hero Section -->
         <section id="inicio" class="hero-section">
-            <div class="hero-overlay"></div>
-            
+            <div class="hero-overlay"></div>           
             <div class="hero-container">
-               
                 <div class="hero-content">
-    <h1>Siente la adrenalina <span>del</span><br>pilotaje <span>profesional</span></h1>
-    <p>Cockpits de alto rendimiento en las mejores pistas de F1, a escala.</p>
-</div>
+                    <h1>Siente la adrenalina <span>del</span><br>pilotaje <span>profesional</span></h1>
+                    <p>Cockpits de alto rendimiento en las mejores pistas de F1, a escala.</p>
+                </div>
                 
-                <!-- Widget de Posiciones -->
-                <div class="leaderboard-widget">
-    <div class="leaderboard-header">
-        <h3>POSICIONES</h3>
-    </div>
-    
-    <!-- Contenedor del Carrusel -->
-    <div class="carousel-wrapper">
-        <div class="carousel-track" id="leaderboard-track">
-            
-            
-            <div class="carousel-slide">
-                <div class="leaderboard-list">
-                    <!-- Fila 1 -->
-                    <div class="leaderboard-item">
-                        <span class="rank">1</span>
-                        <div class="driver-banner">
-                            <img src="assets/img/logo.1.png" class="team-logo" alt="McLaren">
-                            <img src="assets/img/norris.png" class="driver-photo" alt="Norris">
-                            <span class="driver-name">NORRIS</span>
-                        </div>
-                        <span class="points">365</span>
-                    </div>
-                    <!-- Fila 2 -->
-                    <div class="leaderboard-item">
-                        <span class="rank">2</span>
-                        <div class="driver-banner">
-                            <img src="assets/img/logo.1.png" class="team-logo" alt="McLaren">
-                            <img src="assets/img/leonardo.png" class="driver-photo ajuste-leonardo" alt="leonardo">
-                            <span class="driver-name">LEONARDO</span>
-                        </div>
-                        <span class="points">355</span>
-                    </div>
-                    <!-- Fila 3 -->
-                    <div class="leaderboard-item">
-                        <span class="rank">3</span>
-                        <div class="driver-banner">
-                            <img src="assets/img/logo.1.png" class="team-logo" alt="McLaren">
-                            <img src="assets/img/piastri-removebg-preview.png" class="driver-photo" alt="Piastri">
-                            <span class="driver-name">PIASTRI</span>
-                        </div>
-                        <span class="points">255</span>
-                    </div>
-                </div>
-            </div>
+                <!-- Widget Promocional / Publicitario -->
+                <!-- Widget Promocional / Publicitario -->
+                <div class="promo-widget">
+                    <div class="carousel-wrapper">
+                        <div class="carousel-track" id="promo-track">
+                            
+                            <!-- SLIDE 1: Video Demostrativo FPV -->
+                            <div class="carousel-slide active-slide">
+                                <video autoplay loop muted playsinline class="promo-media">
+                                    <source src="assets/img/F1Edit.mp4" type="video/mp4">
+                                </video>
+                                <div class="promo-overlay">
+                                    <span class="promo-badge">NUEVO</span>
+                                    <h3>VIVE LA INMERSIÓN FPV</h3>
 
-            <!-- SLIDE 2 -->
-            <div class="carousel-slide">
-                <div class="leaderboard-list">
-                    <div class="leaderboard-item">
-                        <span class="rank">4</span>
-                        <div class="driver-banner" style="background-color: #dc0000;"> 
-                            <img src="assets/img/FERRARI.png" class="team-logo" alt="Ferrari">
-                            <img src="assets/img/hamilton-removebg-preview.png " class="driver-photo" alt="Hamilton">
-                            <span class="driver-name">HAMILTON</span>
+                                    <!-- Botón exclusivo para el video -->
+                                    <a href="#descubrir" class="btn-ver-mas slide-btn">DESCUBRIR <span class="plus-icon">+</span></a>
+                                </div>
+                            </div>
+
+                            <!-- SLIDE 2: Banner de Patrocinador o Hardware -->
+                            <div class="carousel-slide">
+                                <img src="assets/img/circuito.jpg" alt="Promo Cockpit" class="promo-media">
+                                <div class="promo-overlay">
+                                    <span class="promo-badge sponsor">SPONSOR</span>
+                                    <h3>MEJORA TU COCKPIT</h3>
+                                    <p>Adquiere la nueva estructura profesional.</p>
+                                    <!-- Botón exclusivo para el Sponsor -->
+                                    <a href="#modelos" class="btn-ver-mas slide-btn">VER EQUIPOS <span class="plus-icon">+</span></a>
+                                </div>
+                            </div>  
+                    
+                            <!-- SLIDE 3: Top Pilotos (Mini Tablero) -->
+                            <div class="carousel-slide">
+                                <div class="mini-leaderboard">
+                                    <h3 class="mini-title">TOP PILOTOS ACTUALES</h3>
+                                    <div class="leaderboard-list">
+                                        <!-- Fila 1 -->
+                                        <div class="leaderboard-item">
+                                            <span class="rank">1</span>
+                                            <div class="driver-banner">
+                                                <img src="assets/img/logo.1.png" class="team-logo" alt="McLaren">
+                                                <img src="assets/img/norris.png" class="driver-photo" alt="Norris">
+                                                <span class="driver-name">NORRIS</span>
+                                            </div>
+                                            <span class="points">365</span>
+                                        </div>
+                                        <!-- Fila 2 -->
+                                        <div class="leaderboard-item">
+                                            <span class="rank">2</span>
+                                            <div class="driver-banner">
+                                                <img src="assets/img/logo.1.png" class="team-logo" alt="McLaren">
+                                                <img src="assets/img/leonardo.png" class="driver-photo ajuste-leonardo" alt="leonardo">
+                                                <span class="driver-name">LEONARDO</span>
+                                            </div>
+                                            <span class="points">355</span>
+                                        </div>
+                                        <!-- Fila 3 -->
+                                        <div class="leaderboard-item">
+                                            <span class="rank">3</span>
+                                            <div class="driver-banner">
+                                                <img src="assets/img/logo.1.png" class="team-logo" alt="McLaren">
+                                                <img src="assets/img/piastri-removebg-preview.png" class="driver-photo" alt="Piastri">
+                                                <span class="driver-name">PIASTRI</span>
+                                            </div>
+                                            <span class="points">255</span>
+                                        </div>
+                                    </div>
+                                    <!-- Botón exclusivo para los pilotos -->
+                                    <a href="#posiciones" class="btn-ver-mas slide-btn center-btn">VER TABLERO <span class="plus-icon">+</span></a>
+                                </div>
+                            </div>
+                            
                         </div>
-                        <span class="points">240</span>
                     </div>
-            
-            <div class="leaderboard-item">
-                        <span class="rank">5</span>
-                        <div class="driver-banner" style="background-color: #dc0000;"> 
-                            <img src="assets/img/FERRARI.PNG" class="team-logo" alt="Ferrari">
-                            <img src="assets/img/charles-leclerc-ferrari-removebg-preview.png " class="driver-photo" alt="Leclerc">
-                            <span class="driver-name">LECLERC</span>
+
+                    <div class="promo-footer">
+                        <!-- Eliminamos el botón global y solo dejamos los puntos centrados -->
+                        <div class="pagination-dots" id="promo-dots">
+                            <span class="dot active"></span>
+                            <span class="dot"></span>
+                            <span class="dot"></span>
                         </div>
-                        <span class="points">240</span>
-                    </div>
-            <div class="leaderboard-item">
-                        <span class="rank">6</span>
-                        <div class="driver-banner" style="background-color: #dc0000;"> 
-                            <img src="assets/img/FERRARI.png" class="team-logo" alt="Ferrari">
-                            <img src="assets/img/GIO.png " class="driver-photo ajuste-leonardo" alt="Giovinazzi">
-                            <span class="driver-name">GIOVINAZZI</span>
-                        </div>
-                        <span class="points">240</span>
-                    </div>
-                </div>
-            </div>
-            <!-- SLIDE 3 -->
-            <div class="carousel-slide">
-                <div class="leaderboard-list">
-                    <div class="leaderboard-item">
-                        <span class="rank">7</span>
-                        <div class="driver-banner" style="background-color: #0039f5;"> 
-                            <img src="assets/img/red-removebg-preview.png" class="team-logo" alt="Ferrari">
-                            <img src="assets/img/MAX.png " class="driver-photo" alt="Verstappen">
-                            <span class="driver-name">VERSTAPPEN</span>
-                        </div>
-                        <span class="points">240</span>
-                    </div>
-            
-            <div class="leaderboard-item">
-                        <span class="rank">8</span>
-                        <div class="driver-banner" style="background-color: #0039f5;"> 
-                            <img src="assets/img/red-removebg-preview.png" class="team-logo" alt="Ferrari">
-                            <img src="assets/img/images-removebg-preview.png " class="driver-photo" alt="Hadjar">
-                            <span class="driver-name">HADJAR</span>
-                        </div>
-                        <span class="points">240</span>
-                    </div>
-            <div class="leaderboard-item">
-                        <span class="rank">9</span>
-                        <div class="driver-banner" style="background-color: #0039f5;"> 
-                            <img src="assets/img/red-removebg-preview.png" class="team-logo" alt="Ferrari">
-                            <img src="assets/img/YUKI.png " class="driver-photo ajuste-leonardo" alt="Tsunoda">
-                            <span class="driver-name">TSUNODA</span>
-                        </div>
-                        <span class="points">240</span>
-                    </div>
-                </div>
-            </div>
-            <!-- SLIDE 4 -->
-            <div class="carousel-slide">
-                <div class="leaderboard-list">
-                    <div class="leaderboard-item">
-                        <span class="rank">10</span>
-                        <div class="driver-banner" style="background-color: #1eff00;"> 
-                            <img src="assets/img/aston-martin-brand-logo-symbol-design-british-cars-automobile-illustration-free-vector-removebg-preview (1).png" class="team-logo" alt="Ferrari">
-                            <img src="assets/img/images__1_-removebg-preview.png " class="driver-photo" alt="Alonso">
-                            <span class="driver-name">ALONSO</span>
-                        </div>
-                        <span class="points">240</span>
-                    </div>
-            
-            <div class="leaderboard-item">
-                        <span class="rank">11</span>
-                        <div class="driver-banner" style="background-color: #1eff00;"> 
-                            <img src="assets/img/aston-martin-brand-logo-symbol-design-british-cars-automobile-illustration-free-vector-removebg-preview (1).png" class="team-logo" alt="Ferrari">
-                            <img src="assets/img/images__2_-removebg-preview.png " class="driver-photo" alt="Stroll">
-                            <span class="driver-name">STROLL</span>
-                        </div>
-                        <span class="points">240</span>
-                    </div>
-            <div class="leaderboard-item">
-                        <span class="rank">12</span>
-                        <div class="driver-banner" style="background-color: #1eff00;"> 
-                            <img src="assets/img/aston-martin-brand-logo-symbol-design-british-cars-automobile-illustration-free-vector-removebg-preview (1).png" class="team-logo" alt="Ferrari">
-                            <img src="assets/img/images__3_-removebg-preview.png " class="driver-photo ajuste-leonardo" alt="Drugovich">
-                            <span class="driver-name">DRUGOVICH</span>
-                        </div>
-                        <span class="points">240</span>
                     </div>
                 </div>
-            </div>
                 
-
-        </div>
-    </div>
-
-    <div class="leaderboard-footer">
-        <button class="btn-ver-mas">VER MÁS <span class="plus-icon">+</span></button>
-        <div class="pagination-dots" id="carousel-dots">
-            <span class="dot active"></span>
-            <span class="dot"></span>
-            <span class="dot"></span>
-            <span class="dot"></span>
-        </div>
-    </div>
-</div>
             </div>
         </section>
-
 <section id="nosotros" class="nosotros-section">
     
     <!-- VIDEO DE FONDO INSERTADO AQUÍ -->
@@ -310,10 +228,10 @@
     <div class="circuitos-content">
         
         
-        <div class="circuit-row">
+        <div class="circuit-row fade-on-scroll">
             <div class="circuit-img">
                 
-                <img src="assets/img/circuito.jpg" alt="Mapa Monte Carlo">
+                <img src="assets/img/circuito.jpg" alt="Mapa Monte Carlo" loading="lazy">
             </div>
             <div class="circuit-info">
                 <h3>Diseño y <span>Escalado CAD</span></h3>
@@ -324,7 +242,7 @@
         </div>
 
        
-        <div class="circuit-row">
+        <div class="circuit-row fade-on-scroll">
             <div class="circuit-info">
                 <h3>Mecanizado <span>CNC</span></h3>
                 <h4>Relieve estructural</h4>
@@ -332,14 +250,14 @@
                 <button class="btn-ver-mas">VER MÁS <span class="plus-icon">+</span></button>
             </div>
             <div class="circuit-img">
-                <img src="assets/img/eso.jpg" alt="Mecanizado CNC">
+                <img src="assets/img/eso.jpg" alt="Mecanizado CNC" loading="lazy">
             </div>
         </div>
         
     </div>
 </section>
 <section id="modelos" class="cockpit-section">
-    <div class="cockpit-container">
+    <div class="cockpit-container fade-on-scroll">
         <h2 class="cockpit-title">Cockpits de alto rendimiento diseñados<br>para verdaderos pilotos</h2>
         <p class="cockpit-description" style="font-size: 18px; line-height: 1.6;" >
             Este sistema avanzado utiliza tecnología de latencia ultrabaja para retransmitir la vista en primera persona<br>
@@ -349,9 +267,9 @@
         <a href="registrocliente.html" class="btn-partner">CONVIÉRTETE EN PARTNER</a>
     </div>
     
-    <div class="cockpit-image-wrapper">
+    <div class="cockpit-image-wrapper fade-on-scroll">
         
-        <img src="assets/img/pantallas.png" alt="Simulador de alto rendimiento Kartag">
+        <img src="assets/img/pantallas.png" alt="Simulador de alto rendimiento Kartag" loading="lazy">
         
        
         <div class="fade-overlay"></div>
@@ -369,7 +287,7 @@
                 ALPHARETTA, GA 30005, USA
             </p>
             <div class="social-icons">
-                <a href="#"><img src="assets/img/icon-fb.png" alt="Facebook"></a>
+                <a href="#"><img src="assets/img/facebook-removebg-preview.png" alt="Facebook"></a>
                 <a href="#"><img src="assets/img/icon-ig.png" alt="Instagram"></a>
                 <a href="#"><img src="assets/img/icon-wa.png" alt="WhatsApp"></a>
                 <a href="#"><img src="assets/img/icon-pt.png" alt="Pinterest"></a>
@@ -441,6 +359,5 @@
 </footer>
 
     <script src="js/main.js"></script>
-    <script src="js/main.js?v=2"></script>
 </body>
 </html>

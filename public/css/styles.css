@@ -12,7 +12,303 @@ body {
     margin: 0;
     padding: 0;
 }
+/* WIDGET PROMOCIONAL (HERO)*/
+.promo-widget {
+    background: rgba(255, 255, 255, 0.03); 
+    backdrop-filter: blur(12px); 
+    -webkit-backdrop-filter: blur(12px); 
+    border: 1px solid rgba(255, 255, 255, 0.15); 
+    border-radius: 35px;
+    padding: 32px; 
+    width: 100%; 
+    max-width: 440px; 
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+    font-family: 'Montserrat', sans-serif;
+    margin-right: -30px; 
+    position: relative;
+    top: 100px; 
+    flex-shrink: 0; 
+    overflow: hidden;
+}
 
+.promo-media {
+    width: 100%;
+    height: 280px; /* Aumentamos el alto para que quepa el botón sin asfixiar la imagen/video */
+    object-fit: cover;
+    border-radius: 12px;
+    display: block;
+    background-color: #000000; /* Fondo negro por si el video tarda un milisegundo en cargar */
+}
+.mini-leaderboard {
+    width: 100%;
+    height: 290px; /* Igualamos la altura con el video para que el carrusel no salte */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 5px;
+}
+
+/* Efecto de degradado negro sobre el video para que el texto se lea */
+.promo-overlay {
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 100%;
+    padding: 80px 20px 20px 20px; /* Más espacio arriba para el degradado */
+    background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.6) 60%, rgba(0,0,0,0) 100%);
+    border-radius: 0 0 12px 12px;
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Alinea los textos a la izquierda */
+}
+
+.promo-badge {
+    background-color: #b87333;
+    color: #ffffff;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 4px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    display: inline-block;
+}
+
+.promo-badge.sponsor {
+    background-color: #333333;
+    border: 1px solid #b87333;
+}
+
+.promo-overlay h3 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.promo-overlay p {
+    font-size: 0.85rem;
+    color: #cccccc;
+}
+
+.promo-footer {
+    display: flex;
+    justify-content: center; /* Centra los puntitos perfectamente */
+    align-items: center;
+    margin-top: 15px;
+    padding: 0 10px;
+}
+.slide-btn {
+    margin-top: 12px;
+    width: fit-content;
+    text-decoration: none; 
+    padding: 8px 16px;
+        font-size: 0.8rem;
+}
+
+.center-btn {
+    margin: 15px auto 0 auto; /* Centra el botón del Tablero de Pilotos */
+}
+.btn-ver-mas {
+    transition: all 0.3s ease; /* Transición suave */
+}
+
+.btn-ver-mas:hover {
+    background-color: #b87333; /* Relleno cobre */
+    color: #ffffff; /* Texto blanco */
+    transform: translateY(-2px); /* Se levanta un poquito */
+    box-shadow: 0 4px 15px rgba(184, 115, 51, 0.4); /* Resplandor cobre */
+}
+
+/* Asegurar que los puntitos del carrusel parezcan clicables */
+.pagination-dots .dot {
+    cursor: pointer; 
+}
+
+.pagination-dots .dot:hover {
+    background-color: rgba(184, 115, 51, 0.6); /* Resplandor sutil al pasar el ratón */
+}
+/* MINI TABLERO DE PILOTOS */
+.mini-leaderboard {
+    width: 100%;
+    height: 290px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 5px;
+}
+
+.mini-title {
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+    text-align: center;
+    letter-spacing: 2px;
+}
+.leaderboard-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; 
+}
+.leaderboard-item {
+    display: flex;
+    align-items: center;
+    background-color: #f2f2f2; 
+    height: 48px;
+    border-radius: 6px;
+    overflow: hidden; 
+    width: 100%;
+}
+.rank {
+    color: #f8931f; 
+    font-size: 1.4rem;
+    font-weight: 800; 
+    width: 45px; /* Espacio fijo exacto */
+    text-align: center;
+    flex-shrink: 0; 
+}
+.driver-banner {    
+    flex: 1; /* Ocupa automáticamente el espacio sobrante en el medio */
+    background-color: #f8931f; 
+    height: 100%;
+    display: flex;
+    align-items: center;
+    position: relative;
+    padding: 0 15px;
+    overflow: visible; 
+    min-width: 0; 
+}
+.points {
+    color: #f8931f; 
+    font-size: 1.2rem;
+    font-weight: 800; 
+    min-width: 65px; /* ANCHO CORREGIDO para que quepa el número completo */
+    text-align: center;
+    padding: 0 10px; 
+    flex-shrink: 0; 
+}
+
+.driver-name {
+    color: white;
+    font-weight: 900; 
+    font-size: 1.1rem;
+    margin-left: auto; 
+    white-space: nowrap;
+    z-index: 2; 
+}
+.driver-photo {
+    height: 120%; 
+    position: absolute;
+    bottom: 0;
+    left: 45px;
+    z-index: 1;
+}
+
+.team-logo {
+    height: 20px;
+    opacity: 0.9;
+    z-index: 2;
+}
+
+
+
+/* =========================================
+   PANTALLA DE CARGA (REVELADO IZQ A DER)
+   ========================================= */
+#preloader {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background-color: #0b0b0b; 
+    z-index: 999999; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.8s ease, visibility 0.8s;
+}
+
+.loader-logo-wrapper {
+    position: relative;
+    height: 45px; /* Asegura el tamaño de tu logo */
+    width: 250px; /* Ajusta este valor según qué tan ancho sea tu logo en píxeles */
+}
+
+/* Control general para ambas imágenes */
+.loader-img {
+    height: 100%;
+    width: 250px; /* Obliga a mantener el ancho para que coincidan exactamente */
+    object-fit: contain;
+    object-position: left center;
+}
+
+/* El logo de fondo, semitransparente o en escala de grises */
+.loader-bg {
+    position: absolute;
+    top: 0; left: 0;
+    opacity: 0.2; 
+    filter: grayscale(100%); /* Lo vuelve blanco/negro apagado */
+}
+
+/* El contenedor que hace el efecto de carga */
+.reveal-container {
+    position: absolute;
+    top: 0; left: 0;
+    height: 100%;
+    width: 0%; /* Empieza en 0 (invisible) */
+    overflow: hidden; /* Oculta la parte del logo que aún no ha cargado */
+    animation: fill-logo 3s ease-out forwards; /* 3 segundos exactos */
+}
+
+/* La imagen a color dentro del contenedor recortado */
+.loader-color {
+    /* Mantiene los colores originales dorados/grises de Kartag */
+    opacity: 1;
+}
+
+@keyframes fill-logo {
+    0% { width: 0%; }
+    100% { width: 100%; }
+}
+
+/* 1ra Animación: Latido y Resplandor (Color exacto Kartag #b87333) */
+@keyframes engine-pulse {
+    0% { 
+        transform: scale(0.98); 
+        filter: drop-shadow(0 0 5px rgba(184, 115, 51, 0.2)); 
+    }
+    100% { 
+        transform: scale(1.02); 
+        filter: drop-shadow(0 0 25px rgba(184, 115, 51, 0.9)); 
+    }
+}
+
+/* 2da Animación: Recorrido del reflejo */
+@keyframes metallic-sweep {
+    0% { left: -100%; }
+    25% { left: 200%; }
+    100% { left: 200%; } /* Pausa para que el efecto no sea mareante */
+}
+/* =========================================
+   ANIMACIONES DE SCROLL
+   ========================================= */
+.fade-on-scroll {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1), transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.fade-on-scroll.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+@keyframes metallic-wipe {
+    to { background-position: 200% center; }
+}
+
+@keyframes pulse-engine {
+    0% { transform: scale(0.95); opacity: 0.6; }
+    100% { transform: scale(1.05); opacity: 1; }
+}
 /*NAVBAR*/
 .navbar {
     position: fixed; 
@@ -144,6 +440,8 @@ body {
     display: flex;
     margin-top: 80px;
     align-items: center;
+    border-radius: 50px; /* Cambia este número para hacerlos más o menos redondos */
+    overflow: hidden;
 }
 
 /* ANIMACIONES */
@@ -226,26 +524,6 @@ body {
 }
 
 /*Widget de Posiciones*/
-    .leaderboard-widget {
-    background: rgba(187, 187, 187, 0.95);
-    border-radius: 29px;
-    padding: 58px; /* Reducimos ligeramente para que los elementos internos respiren mejor */
-    width: 100%; 
-    max-width: 443px; 
-    color: #000;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
-    font-family: 'Montserrat', sans-serif;
-    
-    /* ELIMINAMOS EL MARGEN NEGATIVO */
-    margin-right: -35px; 
-    
-    /* CONTROL VERTICAL */
-    position: relative;
-    top: 100px; /* Ajústalo hacia arriba o abajo sin miedo a romper los lados */
-    
-    /* Evita que la caja se comprima de forma extraña en laptops pequeñas */
-    flex-shrink: 0; 
-}
 
 .leaderboard-header h3 {
     background-color: #b87333;
@@ -260,7 +538,7 @@ body {
 .leaderboard-list {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 15px;
     margin-bottom: 15px;
 }
 .leaderboard-item {
@@ -274,9 +552,6 @@ body {
     font-weight: bold;
 }
 
-.leaderboard-item .rank {
-    font-size: 1.8rem;
-}
 .leaderboard-item .points {
     background-color: white;
     color: #f8931f;
@@ -300,7 +575,7 @@ body {
 .pagination-dots .dot {
     display: inline-block;
     width: 8px; height: 8px;
-    background-color: #ccc;
+    background-color: #000000;
     border-radius: 50%;
     margin-left: 5px;
 }
@@ -348,6 +623,7 @@ body {
     min-width: 100%;
     width: 100%; 
     flex-shrink: 0;
+    position: relative
 }
 .carousel-slide .team-logo,
 .carousel-slide .driver-photo,
@@ -393,31 +669,6 @@ body {
     background-color: #f2f2f2; 
     height: 48px;
 }
-.rank, .points {
-    color: #f8931f; 
-    font-size: 1.3rem;
-    font-weight: 400px; 
-    width: 35px;
-    text-align: center;
-    background-color: transparent !important;
-}
-.rank {
-    width: 55px; 
-    text-align: center; 
-     padding-right: 10px; 
-}
-.driver-banner {    
-    flex: 1;
-    min-width: 0; 
-    background-color: #f8931f; 
-    height: 100%;
-    display: flex;
-    align-items: center;
-    position: relative;
-    padding: 0 15px;
-    overflow: visible; 
-}
-
 
 .team-logo {
     height: 20px;
@@ -435,17 +686,6 @@ body {
     flex-shrink: 0;
 }
 
-.driver-banner {    
-    flex: 1;
-    min-width: 0; 
-    background-color: #f8931f; 
-    height: 100%;
-    display: flex;
-    align-items: center;
-    position: relative;
-    padding: 0 15px;
-    overflow: visible; 
-}
 
 .driver-name {
     color: white;
@@ -701,6 +941,18 @@ img.ajuste-leonardo {
     border: 2px solid #b87333; 
     color: #b87333;
     padding: 20px 30px;
+    border-radius: 6px; 
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 4px;
+    margin-bottom: 25px;
+    text-transform: uppercase;
+}
+.badge-nosotros {
+    display: inline-block;
+    border: 2px solid #b87333; 
+    color: #b87333;
+    padding: 10px 20px;
     border-radius: 6px; 
     font-size: 0.9rem;
     font-weight: 700;
@@ -1022,22 +1274,6 @@ img.ajuste-leonardo {
     letter-spacing: 1px;
 }
 
-.hamburger {
-    display: none; 
-    cursor: pointer;
-    flex-direction: column;
-    gap: 5px;
-    z-index: 10000; 
-}
-
-.hamburger .bar {
-    width: 25px;
-    height: 3px;
-    background-color: #888888;
-    border-radius: 3px;
-    transition: all 0.3s ease; 
-}
-
 @media (max-width: 768px) {
     html, body {
         overflow-x: hidden;
@@ -1091,7 +1327,6 @@ img.ajuste-leonardo {
         width: auto;
     }
 
-    .hamburger, 
     .nav-indicator {
         display: none !important;
     }
@@ -1148,9 +1383,15 @@ img.ajuste-leonardo {
         text-align: center;
     }
     .hero-content h1 {
-        font-size: 2.5rem;
+        font-size: 2.1rem;
         margin-bottom: 15px;
-        
+        line-height: 1.25;
+        color: #000000 !important;
+    }
+    .hero-content h1 span {
+        background: none !important; 
+        -webkit-text-fill-color: #000000 !important; /* Forzamos el negro puro */
+        color: #000000 !important;
     }
     
     .hero-content p {
@@ -1158,20 +1399,29 @@ img.ajuste-leonardo {
         color: #f8f8f8;
     }
 
-    .leaderboard-widget {
-        transform: none; 
+   /* AJUSTES MÓVILES PARA WIDGET PROMO */
+    .promo-widget {
         width: 100%;
         max-width: 380px; 
-        padding: 25px;
+        padding: 20px;
         margin: 0;
+        top: 0; /* Quitamos el empuje hacia abajo en celular */
     }
-    .leaderboard-list {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
+
+    .promo-media, .mini-leaderboard {
+        height: 270px; /* Reducimos la altura un poco en móviles */
     }
-    .leaderboard-item {
-        width: 100%;
+
+    .promo-overlay {
+        padding: 60px 15px 15px 15px; /* Ajustamos el texto */
+    }
+
+    .promo-overlay h3 {
+        font-size: 1.1rem;
+    }
+
+    .driver-photo {
+        height: 100%; /* Ajuste para que las caras no se corten en móvil */
     }
 
     .nosotros-section {
@@ -1189,6 +1439,29 @@ img.ajuste-leonardo {
     .nosotros-header p {
         font-size: 1rem !important;
     }
+    /*  INTERACCIONES DE BOTONES (HOVER) */
+.btn-ver-mas {
+    transition: all 0.3s ease; /* Transición fluida */
+}
+
+/* Efecto al pasar el cursor sobre los botones */
+.btn-ver-mas:hover {
+    background-color: #b87333; 
+    color: #ffffff !important; 
+    transform: translateY(-2px); /* Efecto de levitación */
+    box-shadow: 0 4px 15px rgba(184, 115, 51, 0.4); 
+}
+
+/* Asegurar que los puntitos del carrusel parezcan clicables */
+.pagination-dots .dot {
+    cursor: pointer; 
+}
+
+/* Efecto al pasar el cursor sobre los puntitos inactivos */
+.pagination-dots .dot:not(.active):hover {
+    background-color: rgba(184, 115, 51, 0.6); 
+    transform: scale(1.2); /* Crece un poquito */
+}
     .stats-grid {
         position: relative; 
         display: grid;
