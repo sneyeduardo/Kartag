@@ -4,7 +4,7 @@ const path = require('path');
 const cors = require('cors');
 
 const app = express();
-const PORT = 3000;
+const PORT = 4001;
 
 app.use(cors());
 app.use(express.json({ limit: '10mb' })); 
@@ -13,10 +13,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // CONFIGURACIÓN DE CONEXIÓN A MARIADB
 const pool = mysql.createPool({
-    host: 'localhost',
+    host: '127.0.0.1',
     user: 'root', // Cambia esto si tu usuario en DBeaver/MariaDB es distinto
-    password: 'a-32001919', // Pon la contraseña de tu base de datos local
-    database: 'KartingDB', 
+    password: 'Socket2026**', // Pon la contraseña de tu base de datos local
+    database: 'KARTAG_PAGEDB', 
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0
@@ -307,62 +307,24 @@ app.listen(PORT, () => {
     console.log(`🚀 Servidor Node.js (MariaDB) corriendo en http://localhost:${PORT}`);
 });
 // PASO 1: Datos de la Empresa
-// PASO 1: Datos de la Empresa
-// PASO 1: Datos de la Empresa
-app.post('/api/registro-afiliado-paso1', async (req, res) => {
-    // Solo recibimos companyName y email
-    const { companyName, email } = req.body;
+
+// REGISTRO DE AFILIADOS (Unificado)
+app.post('/api/registro-afiliado', async (req, res) => {
+    // Recibimos los datos exactos que envía el fetch desde socios.html
+    const { firstName, lastName, companyName, email, phone } = req.body;
 
     try {
-        // Rellenamos "TipoDocumento" y "NumeroDocumento" con texto por defecto ("No aplica")
+        // Insertamos los 5 campos directamente en la nueva estructura
         const [result] = await pool.query(
-            `INSERT INTO Afiliados (NombreEmpresa, TipoDocumento, NumeroDocumento, Correo) VALUES (?, 'No aplica', 'N/A', ?)`,
-            [companyName, email]
+            `INSERT INTO Afiliados (Nombre, Apellido, NombreEmpresa, CorreoElectronico, NumeroTelefono) 
+             VALUES (?, ?, ?, ?, ?)`,
+            [firstName, lastName, companyName, email, phone]
         );
         
+        // Respondemos con éxito y devolvemos el Id insertado por si se necesita
         res.json({ status: 'success', partnerId: result.insertId });
     } catch (err) {
-        console.error("Error en registro afiliado paso 1:", err);
-        res.status(500).json({ status: 'error', mensaje: 'Error al registrar la empresa' });
-    }
-});
-
-// PASO 2: Datos de Contacto
-app.post('/api/registro-afiliado-paso2', async (req, res) => {
-    // Estas variables en inglés vienen del formulario HTML, están correctas
-    const { partnerId, firstName, lastName, partnerType, country, phone } = req.body;
-
-    try {
-        // AQUÍ ESTÁ LA CORRECCIÓN: Nombres de columnas en español
-        await pool.query(
-            `UPDATE Afiliados 
-             SET NombreContacto = ?, ApellidoContacto = ?, TipoAsociacion = ?, Pais = ?, Telefono = ? 
-             WHERE Id = ?`,
-            [firstName, lastName, partnerType, country, phone, partnerId]
-        );
-        
-        res.json({ status: 'success' });
-    } catch (err) {
-        // Si hay un error, lo imprimimos en la consola para saber exactamente qué falló
-        console.error("Error REAL en registro afiliado paso 2:", err);
-        res.status(500).json({ status: 'error', mensaje: 'Error al actualizar datos de contacto' });
-    }
-});
-
-// PASO 3: Guardar el Logo
-app.post('/api/registro-afiliado-paso3-logo', async (req, res) => {
-    const { partnerId, logo } = req.body;
-
-    try {
-        // AQUÍ ESTÁ LA CORRECCIÓN: Columna LogoBase64
-        await pool.query(
-            `UPDATE Afiliados SET LogoBase64 = ? WHERE Id = ?`,
-            [logo, partnerId]
-        );
-        
-        res.json({ status: 'success' });
-    } catch (err) {
-        console.error("Error REAL en registro afiliado paso 3:", err);
-        res.status(500).json({ status: 'error', mensaje: 'Error al guardar el logo de la empresa' });
+        console.error("Error al registrar afiliado:", err);
+        res.status(500).json({ status: 'error', mensaje: 'Error al registrar los datos en la base de datos' });
     }
 });
