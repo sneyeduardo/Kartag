@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Driver Registration - KARTAG</title>
+    <!-- Link to external CSS file -->
+    <link rel="stylesheet" href="css/styleclientes.css">
+</head>
+<body>
+    <div class="registro-container">
+        <img class="imagen" src="assets/img/logo.png" width="400" height="100" alt="Kartag RC">
+        <h2>Driver Registration</h2>
+        <div class="step-indicator" id="step-title">Step 1: Identification</div>
+        
+        <form id="form-cliente">
+            <div id="seccion-1" class="seccion activa">
+                <div class="form-grid">
+                    <div class="form-group full-width">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="tipoDocumento">Document Type</label>
+                        <select id="tipoDocumento" required>
+                            <option value="cedula">Identity Card</option>
+                            <option value="pasaporte">Passport</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="numeroDocumento">Document Number</label>
+                        <input type="text" id="numeroDocumento" placeholder="Ex. 12345678" required>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="fechaNacimiento">Date of Birth</label>
+                        <input type="date" id="fechaNacimiento" required>
+                    </div>
+                    
+                    <div class="btn-acciones">
+                        <button type="button" class="btn-primary" onclick="procesarPaso1()">Continue <span style="margin-left:5px;">&#10140;</span></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 2: Personal Data -->
+            <div id="seccion-2" class="seccion">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="nombre">Name</label>
+                        <input type="text" id="nombre" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="apellido">Last Name</label>
+                        <input type="text" id="apellido" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="alias">Alias (Nickname)</label>
+                        <input type="text" id="alias" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="sexo">Gender</label>
+                        <select id="sexo" required>
+                            <option value="M">Male</option>
+                            <option value="F">Female</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="pais">Country</label>
+                        <input type="text" id="pais" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="telefono">Phone</label>
+                        <input type="text" id="telefono" required>
+                    </div>
+                    
+                    <div class="btn-acciones">
+                        <button type="button" class="btn-secondary" onclick="volverPaso1()">&#11013; Back</button>
+                        <button type="button" class="btn-primary" id="btn-siguiente-2" onclick="procesarPaso2()">Continue <span style="margin-left:5px;">&#10140;</span></button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="seccion-3" class="seccion">
+                <div class="camera-box">
+                    <label style="color: #000000; font-weight: bold;">Profile / Pits Photograph</label>
+                    
+                    <!-- Live webcam view -->
+                    <video id="video-webcam" autoplay playsinline></video>
+                    <!-- Static image resulting from the capture -->
+                    <img id="foto-capturada" alt="Captured photo">
+                    <!-- Hidden canvas to process the photo frame -->
+                    <canvas id="canvas-foto" style="display:none;"></canvas>
+
+                    <button type="button" class="btn-camara" id="btn-tomar-foto" onclick="tomarFoto()">📸 Take Photograph</button>
+
+                    <div class="btn-acciones" style="width: 100%;">
+                        <button type="button" class="btn-secondary" onclick="volverPaso2()">&#11013; Back</button>
+                        <button type="button" class="btn-primary" id="btn-submit" onclick="finalizarRegistro()" disabled>Finish and Restart</button>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+          
+        <!-- Visual notifications -->
+        <div id="mensaje-sistema" class="mensaje-alerta"></div>
+        
+        <!-- Driver Counter -->
+    <script>
+        let clienteIdActual = null; 
+        let streamWebcam = null;
+        let imagenBase64 = null;
+
+        function mostrarMensaje(texto, tipo) {
+            const msj = document.getElementById('mensaje-sistema');
+            msj.innerText = texto;
+            msj.className = `mensaje-alerta alerta-${tipo}`;
+            msj.style.display = 'block';
+            setTimeout(() => { msj.style.display = 'none'; }, 4000);
+        }
+
+        document.getElementById('tipoDocumento').addEventListener('change', function() {
+            const inputNumero = document.getElementById('numeroDocumento');
+            if (this.value === 'cedula') {
+                inputNumero.placeholder = "Ex. 12345678";
+            } else {
+                inputNumero.placeholder = "Ex. P1234567";
+            }
+        });
+
+        async function procesarPaso1() {
+            const email = document.getElementById('email').value;
+            const tipoDoc = document.getElementById('tipoDocumento').value;
+            const numDoc = document.getElementById('numeroDocumento').value;
+            const fechaNacimiento = document.getElementById('fechaNacimiento').value;
+
+            if(!email || !numDoc || !fechaNacimiento) {
+                mostrarMensaje("Please complete all fields in Step 1.", "error");
+                return;
+            }
+
+            const btnContinuar = document.querySelector('#seccion-1 .btn-primary');
+            btnContinuar.disabled = true;
+            btnContinuar.innerText = "Saving...";
+
+            let valCedula = tipoDoc === 'cedula' ? numDoc : null;
+            let valPasaporte = tipoDoc === 'pasaporte' ? numDoc : null;
+
+            try {
+                const resp = await fetch('/api/registro-paso1', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, cedula: valCedula, pasaporte: valPasaporte, fechaNacimiento })
+                });
+
+                const result = await resp.json();
+
+                if (result.status === 'success') {
+                    clienteIdActual = result.clienteId; 
+                    
+                    document.getElementById('seccion-1').classList.remove('activa');
+                    document.getElementById('seccion-2').classList.add('activa');
+                    document.getElementById('step-title').innerText = "Step 2: Personal Data";
+                } else {
+                    mostrarMensaje("DB Error: " + result.mensaje, "error");
+                }
+            } catch (error) {
+                mostrarMensaje("Server connection failed in Step 1.", "error");
+            } finally {
+                btnContinuar.disabled = false;
+                btnContinuar.innerHTML = 'Continue <span style="margin-left:5px;">&#10140;</span>';
+            }
+        }
+
+        function volverPaso1() {
+            document.getElementById('seccion-2').classList.remove('activa');
+            document.getElementById('seccion-1').classList.add('activa');
+            document.getElementById('step-title').innerText = "Step 1: Identification";
+        }
+
+        // STEP 2: Update with Personal Data
+        async function procesarPaso2() {
+            if (!clienteIdActual) {
+                mostrarMensaje("Sequence error: Missing driver ID from Step 1.", "error");
+                return;
+            }
+
+            const nombre = document.getElementById('nombre').value;
+            const apellido = document.getElementById('apellido').value;
+            const alias = document.getElementById('alias').value;
+            const sexo = document.getElementById('sexo').value;
+            const pais = document.getElementById('pais').value;
+            const telefono = document.getElementById('telefono').value;
+
+            if(!nombre || !apellido || !alias || !pais || !telefono) {
+                mostrarMensaje("Please complete the mandatory fields in Step 2.", "error");
+                return;
+            }
+
+            const btnSiguiente = document.getElementById('btn-siguiente-2');
+            btnSiguiente.disabled = true;
+            btnSiguiente.innerText = "Saving...";
+
+            try {
+                const resp = await fetch('/api/registro-paso2', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        clienteId: clienteIdActual,
+                        nombre, apellido, alias, sexo, pais, telefono
+                    })
+                });
+
+                const result = await resp.json();
+
+                if (result.status === 'success') {
+                    // Go to Section 3 (Camera)
+                    document.getElementById('seccion-2').classList.remove('activa');
+                    document.getElementById('seccion-3').classList.add('activa');
+                    document.getElementById('step-title').innerText = "Step 3: Driver Photograph";
+                    
+                    iniciarWebcam();
+                } else {
+                    mostrarMensaje("DB Error: " + result.mensaje, "error");
+                }
+            } catch (error) {
+                mostrarMensaje("Server connection failed in Step 2.", "error");
+            } finally {
+                btnSiguiente.disabled = false;
+                btnSiguiente.innerHTML = 'Continue <span style="margin-left:5px;">&#10140;</span>';
+            }
+        }
+
+        function volverPaso2() {
+            detenerWebcam();
+            document.getElementById('seccion-3').classList.remove('activa');
+            document.getElementById('seccion-2').classList.add('activa');
+            document.getElementById('step-title').innerText = "Step 2: Personal Data";
+        }
+
+        // STEP 3: Camera Management and Finish
+        async function iniciarWebcam() {
+            try {
+                streamWebcam = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+                const videoElement = document.getElementById('video-webcam');
+                videoElement.srcObject = streamWebcam;
+                videoElement.style.display = 'block';
+                document.getElementById('foto-capturada').style.display = 'none';
+                document.getElementById('btn-tomar-foto').innerText = "📸 Take Photograph";
+                document.getElementById('btn-submit').disabled = true;
+            } catch (err) {
+                mostrarMensaje("Could not access the webcam. Check permissions.", "error");
+            }
+        }
+
+        function detenerWebcam() {
+            if (streamWebcam) {
+                streamWebcam.getTracks().forEach(track => track.stop());
+            }
+        }
+
+        function tomarFoto() {
+            const video = document.getElementById('video-webcam');
+            const canvas = document.getElementById('canvas-foto');
+            const foto = document.getElementById('foto-capturada');
+            const btnTomar = document.getElementById('btn-tomar-foto');
+
+            if (video.style.display !== 'none') {
+                // Capture video frame to canvas
+                canvas.width = video.videoWidth || 400;
+                canvas.height = video.videoHeight || 300;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+                // Convert to Base64 format to send to the server
+                imagenBase64 = canvas.toDataURL('image/png');
+                foto.src = imagenBase64;
+
+                // Toggle visibility
+                video.style.display = 'none';
+                foto.style.display = 'block';
+                btnTomar.innerText = "🔄 Retake Photo";
+                document.getElementById('btn-submit').disabled = false; // Enable finish
+            } else {
+                // Restart camera if you want to take another photo
+                video.style.display = 'block';
+                foto.style.display = 'none';
+                btnTomar.innerText = "📸 Take Photograph";
+                document.getElementById('btn-submit').disabled = true;
+            }
+        }
+
+        async function finalizarRegistro() {
+            if (!clienteIdActual || !imagenBase64) {
+                mostrarMensaje("Missing image or driver ID.", "error");
+                return;
+            }
+
+            const btnSubmit = document.getElementById('btn-submit');
+            btnSubmit.disabled = true;
+            btnSubmit.innerText = "Saving Photo...";
+
+            try {
+                
+                const resp = await fetch('/api/registro-paso3-foto', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        clienteId: clienteIdActual,
+                        foto: imagenBase64
+                    })
+                });
+
+                const result = await resp.json();
+
+                if (result.status === 'success') {
+                    mostrarMensaje("Registration complete! Restarting system...", "success");
+                    detenerWebcam();
+
+                    
+                    setTimeout(() => {
+                        document.getElementById('form-cliente').reset();
+                        clienteIdActual = null;
+                        imagenBase64 = null;
+                        
+                        // Return to section 1
+                        document.getElementById('seccion-3').classList.remove('activa');
+                        document.getElementById('seccion-1').classList.add('activa');
+                        document.getElementById('step-title').innerText = "Step 1: Identification";
+                    }, 2000);
+
+                } else {
+                    mostrarMensaje("Error saving photo: " + result.mensaje, "error");
+                    btnSubmit.disabled = false;
+                    btnSubmit.innerText = "Finish and Restart";
+                }
+            } catch (error) {
+                mostrarMensaje("Connection failed when sending the photograph.", "error");
+                btnSubmit.disabled = false;
+                btnSubmit.innerText = "Finish and Restart";
+            }
+        }
+    </script>
+</body>
+</html>

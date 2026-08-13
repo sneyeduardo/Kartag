@@ -1,64 +1,68 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Monitor de Pits - KARTAG</title>
+    <title>Pits Monitor - KARTAG</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/monitor.css">
 </head>
 <body>
 
-    <header class="header-monitor">
-        <h1>Centro de Control</h1>
-    </header>
-
-    <div class="monitor-grid">
+    <header class="header-monitor" style="display: flex; justify-content: space-between; align-items: center; padding: 0 20px;">
+        <h1>Control Center</h1>
         
-        <!-- CUADRO 1: Pilotos Salientes (Última Carrera) -->
+        <!-- New race control block -->
+        <div class="controles-carrera" style="display: flex; align-items: center; gap: 20px;">
+            <span id="reloj-carrera" style="font-size: 2rem; font-weight: 700; color: #fff; font-family: monospace;">07:00</span>
+            <button id="btn-iniciar" onclick="arrancarCarrera()" style="background-color: #b87333; color: white; border: none; padding: 12px 24px; font-size: 1.1rem; font-weight: bold; border-radius: 6px; cursor: pointer; transition: 0.3s;">
+                START RACE
+            </button>
+        </div>
+    </header>
+    <div class="monitor-grid">
+        <!-- BOX 1: Outgoing Drivers (Last Race) -->
         <div class="panel-card panel-salientes">
             <div class="panel-header">
-                <h2><i class="fas fa-flag-checkered"></i> Última Carrera</h2>
-                <span class="badge badge-gray">Finalizada</span>
+                <h2><i class="fas fa-flag-checkered"></i> Last Race</h2>
+                <span class="badge badge-gray">Finished</span>
             </div>
             <ul class="lista-pilotos" id="lista-salientes">
-                <!-- Se llenará con JavaScript -->
-                <li class="loading">Cargando pilotos...</li>
+                <!-- Will be filled with JavaScript -->
+                <li class="loading">Loading drivers...</li>
             </ul>
         </div>
-
-        <!-- CUADRO 2: Pilotos en Pista (Carrera Actual) -->
+        <!-- BOX 2: Drivers on Track (Current Race) -->
         <div class="panel-card panel-pista">
             <div class="panel-header">
-                <h2><i class="fas fa-car-side"></i> En Pista</h2>
-                <span class="badge badge-red">En Curso</span>
+                <h2><i class="fas fa-car-side"></i> On Track</h2>
+                <span class="badge badge-red">In Progress</span>
             </div>
             <ul class="lista-pilotos" id="lista-actual">
-                <li class="loading">Cargando pilotos...</li>
+                <li class="loading">Loading drivers...</li>
             </ul>
         </div>
-
-        <!-- CUADRO 3: Pilotos Registrándose (Próxima Carrera) -->
+        <!-- BOX 3: Drivers Registering (Next Race) -->
         <div class="panel-card panel-proximos">
             <div class="panel-header">
-                <h2><i class="fas fa-stopwatch"></i> Próxima Carrera</h2>
-                <span class="badge badge-green">Registrando</span>
+                <h2><i class="fas fa-stopwatch"></i> Next Race</h2>
+                <span class="badge badge-green">Registering</span>
             </div>
             <ul class="lista-pilotos" id="lista-proximos">
-                <li class="loading">Cargando pilotos...</li>
+                <li class="loading">Loading drivers...</li>
             </ul>
         </div>
 
-        <!-- CUADRO 4: Tablero LED (Expandible) -->
+        <!-- BOX 4: LED Scoreboard (Expandable) -->
         <div class="panel-card panel-tablero" id="contenedor-tablero">
             <div class="panel-header">
-                <h2><i class="fas fa-tv"></i> Tablero LED Telemetría</h2>
-                <button class="btn-expandir" onclick="togglePantallaCompleta()" title="Ampliar Tablero">
+                <h2><i class="fas fa-tv"></i> Telemetry LED Scoreboard</h2>
+                <button class="btn-expandir" onclick="togglePantallaCompleta()" title="Expand Scoreboard">
                     <i class="fas fa-expand" id="icono-expandir"></i>
                 </button>
             </div>
-            <!-- Aquí cargamos tu tablero actual -->
+            <!-- Here we load your current scoreboard -->
             <iframe src="tablero.html" id="iframe-tablero" frameborder="0"></iframe>
         </div>
 

@@ -19,15 +19,16 @@ window.addEventListener('load', () => {
     }, timeToWait);
 });
 
-// =========================================
+
 // INICIALIZACIÓN PRINCIPAL DE LA PÁGINA
-// =========================================
 document.addEventListener("DOMContentLoaded", () => {
     
+    // --- A. NAVBAR Y SCROLLSPY ---
     // --- A. NAVBAR Y SCROLLSPY ---
     const links = document.querySelectorAll('.nav-links a');
     const indicator = document.querySelector('.nav-indicator');
     let isClickScrolling = false;
+    let scrollTimeout;
 
     function moveIndicator(elemento) {
         if (!indicator || !elemento) return;
@@ -38,26 +39,63 @@ document.addEventListener("DOMContentLoaded", () => {
     const activeLink = document.querySelector('.nav-links a.active');
     if (activeLink) moveIndicator(activeLink);
 
+    // 1. MANEJO DE CLICS (Navegación fluida)
     links.forEach(link => {
         link.addEventListener('click', function(e) {
             const targetId = this.getAttribute('href');
             if (targetId && targetId.startsWith('#') && targetId !== '#') {
                 e.preventDefault(); 
-                isClickScrolling = true;
                 
+                // Activamos el candado y reiniciamos el temporizador si el usuario hace doble clic
+                isClickScrolling = true;
+                clearTimeout(scrollTimeout);
+                
+                // Movemos el indicador inmediatamente para dar respuesta visual
                 links.forEach(l => l.classList.remove('active'));
                 this.classList.add('active');
                 moveIndicator(this);
                 
+                // Hacemos el scroll suave
                 const targetSection = document.querySelector(targetId);
                 if (targetSection) {
                     targetSection.scrollIntoView({ behavior: 'smooth' });
                 }
                 
-                setTimeout(() => { isClickScrolling = false; }, 800);
+                // Ampliamos el candado a 1.2 segundos para asegurar que el scroll suave termine siempre
+                scrollTimeout = setTimeout(() => { isClickScrolling = false; }, 1200);
             }
         });
     });
+
+    // 2. MANEJO DEL SCROLL CON INTERSECTION OBSERVER (Adiós a los bugs)
+    const observerOptions = {
+        root: null,
+        rootMargin: '-40% 0px -60% 0px', // Detecta la sección cuando pasa por el centro de la pantalla
+        threshold: 0
+    };
+
+    const sectionObserver = new IntersectionObserver((entries) => {
+        // Si el usuario acaba de hacer clic en un enlace, ignoramos la lectura para evitar el rebote
+        if (isClickScrolling) return; 
+
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const currentId = entry.target.getAttribute('id');
+                
+                links.forEach(link => {
+                    if (link.getAttribute('href') === `#${currentId}` && !link.classList.contains('active')) {
+                        links.forEach(l => l.classList.remove('active'));
+                        link.classList.add('active');
+                        moveIndicator(link);
+                    }
+                });
+            }
+        });
+    }, observerOptions);
+
+    // Conectamos el observador a todas tus secciones
+    const sections = document.querySelectorAll('section[id]');
+    sections.forEach(section => sectionObserver.observe(section));
 
     window.addEventListener('scroll', () => {
         if (isClickScrolling) return; 
@@ -285,4 +323,75 @@ if (document.querySelector('.mini-leaderboard')) {
     
     // Que se actualice cada 1 minuto (60000 ms) para mantener los récords frescos
     setInterval(actualizarMiniTablero, 60000); 
+}
+// =========================================
+// GLOBO TERRÁQUEO 3D INTERACTIVO
+// =========================================
+let globoInicializado = false;
+let planeta3D = null;
+
+// 1. Evento para ABRIR el mapa desde el footer
+document.getElementById('btn-abrir-mapa').addEventListener('click', function(e) {
+    e.preventDefault();
+    document.getElementById('mapa-modal').classList.replace('mapa-modal-oculto', 'mapa-modal-visible');
+
+    // Inicializamos el mundo solo la primera vez que se abre para ahorrar memoria
+    if (!globoInicializado) {
+        crearPlaneta();
+        globoInicializado = true;
+    }
+});
+
+// 2. Evento para CERRAR el mapa
+document.getElementById('btn-cerrar-mapa').addEventListener('click', function() {
+    document.getElementById('mapa-modal').classList.replace('mapa-modal-visible', 'mapa-modal-oculto');
+    
+    // Al cerrar, regresamos el planeta y el panel a su posición original
+    document.getElementById('globo-3d').classList.remove('globo-izquierda');
+    document.getElementById('panel-info').classList.remove('panel-abierto');
+    if(planeta3D) planeta3D.pointOfView({ lat: 10.4806, lng: -66.9036, altitude: 2 }, 1000);
+});
+
+// 3. Función constructora del Mundo 3D
+function crearPlaneta() {
+    const contenedor = document.getElementById('globo-3d');
+
+    planeta3D = Globe()
+        (contenedor)
+        .globeImageUrl('//unpkg.com/three-globe/example/img/earth-blue-marble.jpg') // Textura realista
+        .backgroundColor('rgba(0,0,0,0)') // Fondo transparente para ver nuestro blur
+        .pointOfView({ lat: 10.4806, lng: -66.9036, altitude: 2.5 }) // Cámara apuntando a Venezuela
+        .htmlElementsData([
+            { lat: 10.4806, lng: -66.9036, name: 'KARTAG Caracas (Sede)' } // Coordenadas exactas
+        ])
+        .htmlElement(d => {
+            const el = document.createElement('div');
+            el.style.display = 'flex';
+            el.style.flexDirection = 'column';
+            el.style.alignItems = 'center';
+            
+            // Inyectamos el HTML del Pin
+            el.innerHTML = `
+                <div class="pin-marcador" title="Clic para ver instalaciones"></div>
+                <div class="pin-etiqueta">${d.name}</div>
+            `;
+
+            // LA MAGIA DE LA ANIMACIÓN AL HACER CLIC EN EL PIN
+            el.onclick = () => {
+                // A. Desplazamos el contenedor del planeta a la izquierda
+                contenedor.classList.add('globo-izquierda');
+                
+                // B. Deslizamos el panel de la empresa desde la derecha
+                document.getElementById('panel-info').classList.add('panel-abierto');
+                
+                // C. Rotamos el planeta un poco para que Caracas siga centrada a pesar de que el contenedor se movió a la izquierda
+                planeta3D.pointOfView({ lat: 10.4806, lng: -55.0000, altitude: 1.8 }, 1000);
+            };
+
+            return el;
+        });
+
+    // Pequeña rotación automática para que se vea vivo
+    planeta3D.controls().autoRotate = true;
+    planeta3D.controls().autoRotateSpeed = 0.6;
 }

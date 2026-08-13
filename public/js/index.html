@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KARTAG | Feel the adrenaline</title>   
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        .lang-switcher-nav { display: flex; gap: 5px; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 12px; color: white; align-items: center; margin-right: 15px; }
+        .lang-switcher-nav span { cursor: pointer; opacity: 0.5; transition: opacity 0.3s; }
+        .lang-switcher-nav span.active { opacity: 1; text-decoration: underline; }
+        body.lang-de .lang-en { display: none !important; }
+        body.lang-en .lang-de { display: none !important; }
+    </style>
+</head>
+<body class="lang-de">
+    <div id="preloader"><div class="loader-logo-wrapper"><img src="assets/img/logo.1.png" alt="" class="loader-img loader-bg"><div class="reveal-container"><img src="assets/img/Logo.png" alt="Loading Kartag" class="loader-img loader-color"></div></div></div> 
+    <header class="navbar">
+        <div class="logo"><img src="assets/img/logo.png" alt="Kartag RC"></div>
+        <div class="nav-links">
+            <a href="#inicio" class="active"><span class="lang-en">Home</span><span class="lang-de">Startseite</span></a>
+            <a href="#nosotros"><span class="lang-en">About Us</span><span class="lang-de">Über Uns</span></a>
+            <a href="#descubrir"><span class="lang-en">Discover</span><span class="lang-de">Entdecken</span></a>
+            <a href="#modelos"><span class="lang-en">Models</span><span class="lang-de">Modelle</span></a>
+            <div class="nav-indicator"></div>
+        </div>
+        <div class="nav-icons">
+            <div class="lang-switcher-nav"><span id="btn-de" class="active" onclick="switchLang('de')">DE</span><span>|</span><span id="btn-en" onclick="switchLang('en')">EN</span></div>
+            <a href="#" class="icon-link"><img src="assets/img/preguntas.png" alt="Help" class="nav-icon-img"></a>
+            <a href="#" class="icon-link"><img src="assets/img/ubicacion.png" alt="Location" class="nav-icon-img"></a>
+            <a href="login.html" class="icon-link"><img src="assets/img/usuario.png" alt="User" class="nav-icon-img"></a>
+        </div>
+    </header>
+    <main>
+        <!-- Hero Section -->
+        <section id="inicio" class="hero-section">
+            <div class="hero-overlay"></div>           
+            <div class="hero-container">
+                <div class="hero-content">
+                    <h1 class="lang-en">Feel the adrenaline <span>of</span><br><span>professional</span> racing</h1>
+                    <h1 class="lang-de">Spüre das Adrenalin <span>des</span><br><span>professionellen</span> Rennsports</h1>
+                    <p class="lang-en">High-performance cockpits on the best F1 tracks, scaled.</p>
+                    <p class="lang-de">Hochleistungs-Cockpits auf den besten F1-Strecken, maßstabsgetreu.</p>
+                </div>
+                <div class="promo-widget">
+                    <div class="carousel-wrapper">
+                        <div class="carousel-track" id="promo-track">
+                            <div class="carousel-slide active-slide">
+                                <video autoplay loop muted playsinline class="promo-media"><source src="assets/img/F1Edit.mp4" type="video/mp4"></video>
+                                <div class="promo-overlay"><span class="promo-badge"><span class="lang-en">NEW</span><span class="lang-de">NEU</span></span><h3 class="lang-en">EXPERIENCE FPV IMMERSION</h3><h3 class="lang-de">ERLEBE FPV IMMERSION</h3><a href="#descubrir" class="btn-ver-mas slide-btn"><span class="lang-en">DISCOVER</span><span class="lang-de">ENTDECKEN</span> <span class="plus-icon">+</span></a></div>
+                            </div>
+                            <div class="carousel-slide">
+                                <img src="assets/img/circuito.jpg" alt="Promo Cockpit" class="promo-media">
+                                <div class="promo-overlay"><span class="promo-badge sponsor">SPONSOR</span><h3 class="lang-en">UPGRADE YOUR COCKPIT</h3><h3 class="lang-de">RÜSTE DEIN COCKPIT AUF</h3><p class="lang-en">Get the new professional structure.</p><p class="lang-de">Hol dir die neue professionelle Struktur.</p><a href="#modelos" class="btn-ver-mas slide-btn"><span class="lang-en">VIEW EQUIPMENT</span><span class="lang-de">AUSRÜSTUNG ANSEHEN</span> <span class="plus-icon">+</span></a></div>
+                            </div>  
+                            <div class="carousel-slide">
+                                <div class="mini-leaderboard">
+                                    <h3 class="mini-title"><span class="lang-en">CURRENT TOP DRIVERS</span><span class="lang-de">AKTUELLE TOP-FAHRER</span></h3>
+                                    <div class="leaderboard-list">
+                                        <div class="leaderboard-item"><span class="rank">1</span><div class="driver-banner"><img src="assets/img/logo.1.png" class="team-logo" alt="McLaren"><img src="assets/img/norris.png" class="driver-photo" alt="Norris"><span class="driver-name">NORRIS</span></div><span class="points">365</span></div> 
+                                        <div class="leaderboard-item"><span class="rank">2</span><div class="driver-banner"><img src="assets/img/logo.1.png" class="team-logo" alt="McLaren"><img src="assets/img/leonardo.png" class="driver-photo ajuste-leonardo" alt="leonardo"><span class="driver-name">LEONARDO</span></div><span class="points">355</span></div>
+                                        <div class="leaderboard-item"><span class="rank">3</span><div class="driver-banner"><img src="assets/img/logo.1.png" class="team-logo" alt="McLaren"><img src="assets/img/piastri-removebg-preview.png" class="driver-photo" alt="Piastri"><span class="driver-name">PIASTRI</span></div><span class="points">255</span></div>
+                                    </div>
+                                    <a href="#posiciones" class="btn-ver-mas slide-btn center-btn"><span class="lang-en">VIEW LEADERBOARD</span><span class="lang-de">RANGLISTE ANSEHEN</span> <span class="plus-icon">+</span></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="promo-footer"><div class="pagination-dots" id="promo-dots"><span class="dot active"></span><span class="dot"></span><span class="dot"></span></div></div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <script>
+        function switchLang(lang) {
+            document.body.className = 'lang-' + lang;
+            document.getElementById('btn-en').className = (lang === 'en') ? 'active' : '';
+            document.getElementById('btn-de').className = (lang === 'de') ? 'active' : '';
+            localStorage.setItem('kartag_lang', lang);
+        }
+        window.addEventListener('DOMContentLoaded', (event) => {
+            const savedLang = localStorage.getItem('kartag_lang') || 'de';
+            switchLang(savedLang);
+        });
+    </script>
+</body>
+</html>

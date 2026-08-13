@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Telemetría Karting - Réplica LED</title>
+    <title>Karting Telemetry - LED Replica</title>
     <link rel="stylesheet" href="css/styles1.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
@@ -38,7 +38,7 @@
 
     <main class="dashboard-wrapper">
         
-        <!-- PANTALLA 1: CARRERA EN VIVO -->
+        <!-- SCREEN 1: LIVE RACE -->
         <div class="led-scoreboard" id="pantalla-carrera">
             <div class="led-top-bar">
                 <div class="session-badge">KARTAG RACE</div>
@@ -48,14 +48,14 @@
             <div class="board-header">
                 <div></div>
                 <div>Pos</div>
-                <div>Nombre</div>
-                <div>Vueltas</div>
-                <div>Tiempo</div>
+                <div>Name</div>
+                <div>Laps</div>
+                <div>Time</div>
                 <div class="center-text">Kart</div>
-                <div>Mejor</div>
+                <div>Best</div>
             </div>
 
-            <!-- Filas de Carrera -->
+            <!-- Race Rows -->
             <div class="board-row row-cyan" id="fila-0"><div class="avatar-cell"><div class="helmet-icon white-helmet"></div></div><div class="pos-cell">1</div><div class="name-cell">---</div><div class="lap-cell">0</div><div class="time-cell time-green">00:00.000</div><div class="kart-cell"><span class="kart-badge bg-green">-</span></div><div class="best-cell">00:00.000</div></div>
             <div class="board-row row-red" id="fila-1"><div class="avatar-cell"><div class="helmet-icon blue-helmet"></div></div><div class="pos-cell">2</div><div class="name-cell">---</div><div class="lap-cell">0</div><div class="time-cell time-green">00:00.000</div><div class="kart-cell"><span class="kart-badge bg-orange">-</span></div><div class="best-cell">00:00.000</div></div>
             <div class="board-row row-dark" id="fila-2"><div class="avatar-cell"><div class="helmet-icon dark-helmet"></div></div><div class="pos-cell">3</div><div class="name-cell">---</div><div class="lap-cell">0</div><div class="time-cell time-red">00:00.000</div><div class="kart-cell"><span class="kart-badge bg-red">-</span></div><div class="best-cell">00:00.000</div></div>
@@ -64,14 +64,14 @@
             <div class="board-row row-la" id="fila-5"><div class="avatar-cell"><div class="helmet-icon blue-helmet"></div></div><div class="pos-cell">6</div><div class="name-cell">---</div><div class="lap-cell">0</div><div class="time-cell time-red">00:00.000</div><div class="kart-cell"><span class="kart-badge bg-red">-</span></div><div class="best-cell">00:00.000</div></div>
         </div>
 
-        <!-- MODO REPOSO -->
+        <!-- IDLE MODE -->
         <div class="led-scoreboard pantalla-oculta" id="pantalla-reposo">
             <div class="slide-podio activo" id="slide-semana">
-                <h2 class="titulo-podio">🔥 Récords de la Semana 🔥</h2>
+                <h2 class="titulo-podio">🔥 Records of the Week 🔥</h2>
                 <div id="lista-semana"></div>
             </div>
             <div class="slide-podio" id="slide-mes">
-                <h2 class="titulo-podio">👑 Reyes del Mes 👑</h2>
+                <h2 class="titulo-podio">👑 Kings of the Month 👑</h2>
                 <div id="lista-mes"></div>
             </div>
         </div>
@@ -79,15 +79,15 @@
     </main>
 
     <script>
-        // Reloj superior
+        // Top clock
         function mostrarHora() {
             const fecha = new Date();
-            document.getElementById("reloj").textContent = fecha.toLocaleTimeString('es-VE', { hour12: false });
+            document.getElementById("reloj").textContent = fecha.toLocaleTimeString('en-US', { hour12: false });
         }
         setInterval(mostrarHora, 1000);
         mostrarHora();
 
-        // Control de carrusel (Modo Reposo)
+        // Carousel control (Idle Mode)
         let slideActual = 'semana';
         setInterval(() => {
             const pantallaReposo = document.getElementById('pantalla-reposo');
@@ -108,7 +108,7 @@
             const contenedor = document.getElementById(contenedorId);
             contenedor.innerHTML = ''; 
             if (datos.length === 0) {
-                contenedor.innerHTML = '<div class="fila-campeon"><span>Aún no hay tiempos registrados</span></div>';
+                contenedor.innerHTML = '<div class="fila-campeon"><span>No times registered yet</span></div>';
                 return;
             }
             const estilos = ['campeon-pos1', 'campeon-pos2', 'campeon-pos3'];
@@ -122,7 +122,7 @@
             });
         }
 
-        // LÓGICA DE MAPEO Y ANIMACIÓN DE FILAS
+        // MAPPING AND ROW ANIMATION LOGIC
         let mapeoPilotos = {}; 
         let filasHTMLLibres = []; 
 

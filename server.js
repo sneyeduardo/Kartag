@@ -11,9 +11,7 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// ==========================================
 // CONFIGURACIÓN DE CONEXIÓN A MARIADB
-// ==========================================
 const pool = mysql.createPool({
     host: 'localhost',
     user: 'root', // Cambia esto si tu usuario en DBeaver/MariaDB es distinto
@@ -24,9 +22,7 @@ const pool = mysql.createPool({
     queueLimit: 0
 });
 
-// ==========================================
 // ENDPOINTS DEL TABLERO PRINCIPAL
-// ==========================================
 app.get('/api/tablero', async (req, res) => {
     try {
         const [checkCarrera] = await pool.query(`
@@ -97,9 +93,7 @@ app.get('/api/tablero', async (req, res) => {
     }
 });
 
-// ==========================================
 // NUEVO ENDPOINT: TOP PILOTOS PARA EL CARRUSEL
-// ==========================================
 app.get('/api/top-pilotos', async (req, res) => {
     try {
         // Busca los 3 mejores tiempos históricos usando tus tablas reales
@@ -122,9 +116,7 @@ app.get('/api/top-pilotos', async (req, res) => {
     }
 });
 
-// ==========================================
 // REGISTRO DE CLIENTES
-// ==========================================
 app.post('/api/registro-paso1', async (req, res) => {
     try {
         const { email, cedula, pasaporte, fechaNacimiento } = req.body;
@@ -182,16 +174,12 @@ app.post('/api/registro-paso3-foto', async (req, res) => {
     }
 });
 
-// ==========================================
+
 // GESTIÓN DE CARRERAS Y VUELTAS
-// ==========================================
 app.post('/api/iniciar-carrera', async (req, res) => {
     try {
-        await pool.query(`UPDATE Carreras SET Estado = 'Finalizada' WHERE Estado = 'En Curso'`);
-        await pool.query(`
-            INSERT INTO Carreras (NumeroCarreraDiaria, FechaProgramada, HoraInicioReal, Estado)
-            VALUES (1, NOW(), NOW(), 'En Curso')
-        `);
+        // Solo cambia el estado, los pilotos ya están en la pista
+        await pool.query(`UPDATE Carreras SET Estado = 'En Curso' WHERE Estado = 'Preparacion'`);
         res.json({ status: 'success' });
     } catch (err) {
         console.error("Error Carrera:", err);
@@ -201,7 +189,23 @@ app.post('/api/iniciar-carrera', async (req, res) => {
 
 app.post('/api/finalizar-carrera', async (req, res) => {
     try {
-        await pool.query(`UPDATE Carreras SET Estado = 'Finalizada' WHERE Estado = 'En Curso'`);
+        // 1. Finalizamos la carrera que estaba corriendo
+        await pool.query(`UPDATE Carreras SET Estado = 'Finalizada' WHERE Estado IN ('En Curso', 'Preparacion')`);
+
+        // 2. Creamos la SIGUIENTE carrera automáticamente en estado de 'Preparacion'
+        const [result] = await pool.query(`
+            INSERT INTO Carreras (NumeroCarreraDiaria, FechaProgramada, HoraInicioReal, Estado)
+            VALUES (1, NOW(), NOW(), 'Preparacion')
+        `);
+        const nuevaCarreraId = result.insertId;
+
+        // 3. Inscribimos automáticamente a los próximos 6 pilotos a esta nueva carrera
+        await pool.query(`
+            INSERT INTO Vueltas (CarreraId, ClienteId, CarritoId, NumeroVuelta, TiempoVuelta, FechaRegistro)
+            SELECT ?, Id, 0, 0, 0.00, NOW() 
+            FROM (SELECT Id FROM Clientes ORDER BY Id DESC LIMIT 6) AS subquery
+        `, [nuevaCarreraId]);
+
         res.json({ status: 'success' });
     } catch (err) {
         console.error("Error finalizando carrera:", err);
@@ -233,9 +237,7 @@ app.post('/api/registrar-vuelta', async (req, res) => {
     }
 });
 
-// ==========================================
 // MONITOR Y DASHBOARD
-// ==========================================
 app.get('/api/monitor-pits', async (req, res) => {
     try {
         const [salientes] = await pool.query(`
@@ -245,14 +247,22 @@ app.get('/api/monitor-pits', async (req, res) => {
             WHERE v.CarreraId = (SELECT Id FROM Carreras WHERE Estado = 'Finalizada' ORDER BY Id DESC LIMIT 1)
         `);
         
+        // Ahora "En Pista" muestra tanto a los que están corriendo como a los que se están preparando
         const [en_pista] = await pool.query(`
             SELECT DISTINCT c.alias, IFNULL(CAST(v.CarritoId AS CHAR), '-') as kart
             FROM Vueltas v
             INNER JOIN Clientes c ON v.ClienteId = c.Id
-            WHERE v.CarreraId = (SELECT Id FROM Carreras WHERE Estado = 'En Curso' ORDER BY Id DESC LIMIT 1)
+            WHERE v.CarreraId = (SELECT Id FROM Carreras WHERE Estado IN ('En Curso', 'Preparacion') ORDER BY Id DESC LIMIT 1)
         `);
         
-        const [proximos] = await pool.query(`SELECT alias, '-' as kart FROM Clientes ORDER BY Id DESC LIMIT 6`);
+        // "Próximos" muestra a los siguientes 6, excluyendo estrictamente a los que ya están En Pista
+        const [proximos] = await pool.query(`
+            SELECT alias, '-' as kart FROM Clientes 
+            WHERE Id NOT IN (
+                SELECT ClienteId FROM Vueltas WHERE CarreraId = (SELECT Id FROM Carreras WHERE Estado IN ('En Curso', 'Preparacion') ORDER BY Id DESC LIMIT 1)
+            )
+            ORDER BY Id DESC LIMIT 6
+        `);
 
         res.json({ status: 'success', salientes, en_pista, proximos });
     } catch (err) {
@@ -295,4 +305,64 @@ app.post('/dashboard', async (req, res) => {
 
 app.listen(PORT, () => {
     console.log(`🚀 Servidor Node.js (MariaDB) corriendo en http://localhost:${PORT}`);
+});
+// PASO 1: Datos de la Empresa
+// PASO 1: Datos de la Empresa
+// PASO 1: Datos de la Empresa
+app.post('/api/registro-afiliado-paso1', async (req, res) => {
+    // Solo recibimos companyName y email
+    const { companyName, email } = req.body;
+
+    try {
+        // Rellenamos "TipoDocumento" y "NumeroDocumento" con texto por defecto ("No aplica")
+        const [result] = await pool.query(
+            `INSERT INTO Afiliados (NombreEmpresa, TipoDocumento, NumeroDocumento, Correo) VALUES (?, 'No aplica', 'N/A', ?)`,
+            [companyName, email]
+        );
+        
+        res.json({ status: 'success', partnerId: result.insertId });
+    } catch (err) {
+        console.error("Error en registro afiliado paso 1:", err);
+        res.status(500).json({ status: 'error', mensaje: 'Error al registrar la empresa' });
+    }
+});
+
+// PASO 2: Datos de Contacto
+app.post('/api/registro-afiliado-paso2', async (req, res) => {
+    // Estas variables en inglés vienen del formulario HTML, están correctas
+    const { partnerId, firstName, lastName, partnerType, country, phone } = req.body;
+
+    try {
+        // AQUÍ ESTÁ LA CORRECCIÓN: Nombres de columnas en español
+        await pool.query(
+            `UPDATE Afiliados 
+             SET NombreContacto = ?, ApellidoContacto = ?, TipoAsociacion = ?, Pais = ?, Telefono = ? 
+             WHERE Id = ?`,
+            [firstName, lastName, partnerType, country, phone, partnerId]
+        );
+        
+        res.json({ status: 'success' });
+    } catch (err) {
+        // Si hay un error, lo imprimimos en la consola para saber exactamente qué falló
+        console.error("Error REAL en registro afiliado paso 2:", err);
+        res.status(500).json({ status: 'error', mensaje: 'Error al actualizar datos de contacto' });
+    }
+});
+
+// PASO 3: Guardar el Logo
+app.post('/api/registro-afiliado-paso3-logo', async (req, res) => {
+    const { partnerId, logo } = req.body;
+
+    try {
+        // AQUÍ ESTÁ LA CORRECCIÓN: Columna LogoBase64
+        await pool.query(
+            `UPDATE Afiliados SET LogoBase64 = ? WHERE Id = ?`,
+            [logo, partnerId]
+        );
+        
+        res.json({ status: 'success' });
+    } catch (err) {
+        console.error("Error REAL en registro afiliado paso 3:", err);
+        res.status(500).json({ status: 'error', mensaje: 'Error al guardar el logo de la empresa' });
+    }
 });

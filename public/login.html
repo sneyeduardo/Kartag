@@ -1,37 +1,36 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Telemetría Karting</title>
+    <title>Login - Karting Telemetry</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/styles2.css">
 </head>
 <body>
 
-    <!-- Navbar idéntico al index.html para dar contexto de aplicación -->
-
+    <!-- Navbar identical to index.html to provide application context -->
 
     <div class="login-wrapper">
         <div class="glass-container">
             
             <img src="assets/img/logo.png" width="400" height="100" alt="Kartag RC">
-            <p class="subtitle">Acceso Administracion</p>
+            <p class="subtitle">Administration Access</p>
             
             <form action="/dashboard" method="POST">
                 
-                <!-- Campo Usuario -->
+                <!-- Username Field -->
                 <div class="form-group">
-                    <label for="username">Piloto / Usuario</label>
+                    <label for="username">User</label>
                     <div class="input-wrapper">
                         <i class="fas fa-user icon-left"></i>
-                        <input type="text" id="username" name="username" placeholder="Ingresa tu usuario" required autocomplete="off">
+                        <input type="text" id="username" name="username" placeholder="Enter your username" required autocomplete="off">
                     </div>
                 </div>
 
-                <!-- Campo Contraseña -->
+                <!-- Password Field -->
                 <div class="form-group">
-                    <label for="password">Contraseña</label>
+                    <label for="password">Password</label>
                     <div class="input-wrapper">
                         <i class="fas fa-lock icon-left"></i>
                         <input type="password" id="password" name="password" placeholder="••••••••" required>
@@ -41,21 +40,21 @@
                     </div>
                 </div>
 
-                <!-- Opciones (Recordarme y Olvidé contraseña) -->
+                <!-- Options (Remember me and Forgot password) -->
                 <div class="options-group">
                     <label>
-                        <input type="checkbox" name="remember"> Recordarme
+                        <input type="checkbox" name="remember"> Remember me
                     </label>
-                    <a href="#">¿Olvidaste tu contraseña?</a>
+                    <a href="#">Forgot your password?</a>
                 </div>
 
-                <!-- Botón de Enviar -->
-                <button type="submit" class="submit-btn">Iniciar Sesión</button>
+                <!-- Submit Button -->
+                <button type="submit" class="submit-btn">Log In</button>
             </form>
         </div>
     </div>
 
-    <!-- Script para mostrar/ocultar la contraseña -->
+    <!-- Script to show/hide the password -->
     <script>
         function togglePassword() {
             const passwordInput = document.getElementById("password");
@@ -75,21 +74,3 @@
 </body>
 </html>
 
-
-
-
-
-
-
-
-<div id="preloader">
-        <div class="loader-logo-wrapper">
-            <!-- 1. El logo de fondo (apagado) -->
-            <img src="assets/img/logo.1.png" alt="" class="loader-img loader-bg">
-            
-            <!-- 2. Contenedor que se va expandiendo de izquierda a derecha -->
-            <div class="reveal-container">
-                <img src="assets/img/Logo.png" alt="Cargando Kartag" class="loader-img loader-color">
-            </div>
-        </div>
-    </div>

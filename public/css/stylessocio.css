@@ -1,0 +1,1061 @@
+/* =========================================
+   REGLA MAESTRA: BLOQUEO DE SCROLL HORIZONTAL
+   ========================================= */
+html, body {
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden !important;
+    margin: 0;
+    padding: 0;
+    background-color: #0a0a0a;
+    color: #ffffff;
+    font-family: 'Montserrat', sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+/* HERO B2B (SOCIOS)*/
+.hero-b2b {
+    height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: linear-gradient(rgba(10, 10, 10, 0.7), rgba(10, 10, 10, 0.9)), url('../assets/img/movil.png') no-repeat center center / cover;
+    padding-top: 80px;
+    width: 100%;
+}
+/* =========================================
+   ESTILOS PARA LOS ÍCONOS DEL CARRUSEL B2B
+   ========================================= */
+.system-icon-wrapper {
+    width: 100%;
+    height: 180px; /* Misma altura que las imágenes para mantener la proporción */
+    background: linear-gradient(145deg, #111111 0%, #1a1a1a 100%); /* Fondo gris muy oscuro, casi negro */
+    border: 1px solid rgba(255, 255, 255, 0.05); /* Borde súper sutil */
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.4s ease;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.5); /* Sombra interna para dar profundidad */
+}
+
+/* Efecto al pasar el cursor (el cuadro se ilumina un poco) */
+.system-item:hover .system-icon-wrapper {
+    border-color: rgba(184, 115, 51, 0.3); /* Borde color cobre */
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5), inset 0 0 15px rgba(184, 115, 51, 0.1);
+}
+
+.system-icon {
+    width: 60px; /* Tamaño del ícono */
+    height: 60px;
+    color: #b87333; /* El color cobre/naranja de tu marca */
+    filter: drop-shadow(0 0 8px rgba(184, 115, 51, 0.4)); /* Pequeño resplandor */
+    transition: transform 0.4s ease;
+}
+
+/* Efecto al pasar el cursor (el ícono salta ligeramente) */
+.system-item:hover .system-icon {
+    transform: scale(1.1);
+}
+.hero-b2b h1 {
+    font-size: 4.5rem;
+    font-weight: 900;
+    color: #ffffff;
+    text-transform: uppercase;
+    line-height: 1.1;
+    margin-bottom: 20px;
+}
+
+.hero-b2b h1 span {
+    color: #b87333;
+}
+
+.hero-b2b p {
+    font-size: 1.5rem;
+    color: #dddddd;
+    margin-bottom: 40px;
+}
+
+/* =========================================
+   SECCIÓN "THE SYSTEM" (CARRUSEL SCROLL INFINITO)
+   ========================================= */
+.system-section {
+    padding: 100px 0;
+    background-color: #0a0a0a;
+    width: 100%;
+    overflow: hidden;
+}
+
+.system-header {
+    text-align: center;
+    margin-bottom: 60px;
+    padding: 0 20px;
+}
+/*NAVBAR*/
+.navbar {
+    position: fixed; 
+    top: 15px;
+    left: 50%; 
+    transform: translateX(-50%); 
+    z-index: 9999; 
+    background-color: rgba(255, 255, 255, 0.95); 
+    border: 1px solid #d1d1d1;
+    border-radius: 10px; 
+    padding: 2.5px 40px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); 
+    width: 100%; 
+    max-width: 1420px; 
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.navbar a {
+    color: #888888; 
+    text-decoration: none;
+    font-family: Arial, sans-serif; 
+    font-size: 16px;
+    margin: 0 15px; 
+}
+.navbar a.active {
+    color: #888888;
+    border-bottom: 3px solid #cca14e; 
+    padding-bottom: 5px; 
+}
+
+.logo img {
+    height: 55px; 
+    display: block;
+}
+.logo {
+    flex: 1; 
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.nav-links {
+    position: relative; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0px;
+    margin-left: 80px;
+}
+.nav-links a {
+    text-decoration: none;
+    color: #888888;
+    font-size: 15px;
+    font-weight: bold;
+    padding: 5px 15px; 
+    transition: color 0.3s ease;
+    z-index: 1; 
+}
+.nav-links a:hover {
+    color: #333333;
+}
+.nav-links a.active {
+    color: #888888; 
+}
+.nav-indicator {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    background-color: #b87333; 
+    border-radius: 2px; 
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); 
+    z-index: 0;
+}
+
+.nav-icons img.nav-icon-img {
+    width: 22px;  
+    height: 22px; 
+    object-fit: contain;
+    display: block;
+    transition: opacity 0.3s ease;
+}
+.nav-icons img.nav-icon-img:hover {
+    opacity: 0.7;
+}
+.nav-icons {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 0px;
+    color: #888888;
+    font-size: 20px;
+    cursor: pointer;
+    margin-left: 80px;
+}
+
+.icon-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #9e9e9e;
+    font-size: 20px;
+    transition: color 0.3s ease;
+}
+.icon-btn:hover {
+    color: #ffffff;
+}
+
+.system-title {
+    font-size: 3.5rem;
+    font-weight: 900;
+    color: #ffffff;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 15px;
+    margin-top: 40px;
+}
+.system-title2 {
+    font-size: 3.5rem;
+    font-weight: 900;
+    color: #ffffff;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 15px;
+    margin-top: -150px;
+}
+
+.system-subtitle {
+    font-size: 1.2rem;
+    color: #b87333;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+/* =========================================
+   SECCIÓN "THE SYSTEM" (CARRUSEL SCROLL INFINITO PURO)
+   ========================================= */
+.system-carousel-wrapper {
+    width: 100%;
+    position: relative;
+    overflow: hidden !important;
+    padding: 20px 0;
+}
+
+/* AQUÍ VA LA ANIMACIÓN: En el contenedor padre que abraza las dos pistas */
+.system-carousel {
+    display: flex;
+    width: max-content; 
+    animation: scrollInfinito 60s linear infinite; /* Movimiento suave y continuo */
+}
+
+/* Al poner el ratón encima, se pausa todo el carrusel */
+.system-carousel:hover {
+    animation-play-state: paused;
+}
+
+.system-carousel::-webkit-scrollbar { 
+    display: none; 
+}
+
+/* Las pistas YA NO TIENEN ANIMACIÓN, solo dan estructura */
+.system-track {
+    display: flex;
+    gap: 50px; 
+    padding-right: 50px; /* Empalma perfecto el final de la Pista 1 con el inicio de la Pista 2 */
+}
+       #lang-switcher {
+  display: flex;
+  flex-direction: column; /* Apila los botones de arriba hacia abajo */
+  width: fit-content;     /* Evita que el contenedor ocupe todo el ancho de la pantalla */
+  gap: 8px;               /* Añade un pequeño espacio entre las opciones */
+}
+#lang-switcher span {
+  cursor: pointer;
+}
+        #lang-switcher span { cursor: pointer; opacity: 0.6; transition: opacity 0.3s; }
+        #lang-switcher span.active { opacity: 0.50; text-decoration: underline; }
+        
+        /* Language Display Logic */
+        body.lang-de .lang-en { display: none !important; }
+        body.lang-en .lang-de { display: none !important; }
+/* Elementos del Carrusel */
+.system-item {
+    width: 280px; 
+    flex-shrink: 0; 
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    white-space: normal; 
+}
+
+.system-item:hover {
+    transform: translateY(-8px);
+    transition: transform 0.4s ease;
+}
+
+.system-img {
+    width: 100%;
+    height: 180px; 
+    object-fit: contain; 
+    border-radius: 8px; 
+    pointer-events: none; 
+}
+
+.system-item h3 {
+    color: #ffffff;
+    font-size: 1.3rem; 
+    font-weight: 900;
+    margin-top: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.system-item p {
+    color: #bbbbbb;
+    line-height: 1.5;
+    font-size: 0.95rem; 
+}
+
+/* LA ANIMACIÓN MAESTRA CORREGIDA */
+@keyframes scrollInfinito {
+    0% { 
+        transform: translateX(0); 
+    }
+    100% { 
+        /* Al moverse al -50%, la pista 2 queda EXACTAMENTE donde empezó la pista 1. El salto será invisible. */
+        transform: translateX(-50%); 
+    } 
+}
+/* SECCIÓN GLOBO 3D B2B */
+.globe-b2b-section {
+    background-color: #111111;
+    padding: 200px 20px 100px 20px; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 100%;
+    overflow: hidden; /* Evita barras de scroll al mover el panel */
+}
+.globe-layout {
+    display: flex;
+    width: 100%;
+    max-width: 1200px;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    margin-top: -100px;
+}
+
+#globe-container {
+    width: 100%;
+    max-width: 550px; /* Tamaño del globo */
+    height: 550px;
+    transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1); /* Animación suave */
+    cursor: grab;
+    z-index: 5;
+    transform: translate(0px, 80px);
+}
+
+#globe-container:active { cursor: grabbing; } 
+#globe-container.shift-left {
+    transform: translateX(-35%);
+}
+.side-panel {
+    position: absolute;
+    right: -500px; /* Escondido fuera de la pantalla */
+    top: 50%;
+    transform: translateY(-50%);
+    width: 380px;
+    background: linear-gradient(145deg, #161616 0%, #0a0a0a 100%);
+    border-left: 3px solid #b87333;
+    padding: 40px 30px;
+    border-radius: 12px 0 0 12px;
+    box-shadow: -15px 0 40px rgba(0,0,0,0.8);
+    transition: right 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+    z-index: 10;
+}
+
+/* La clase que abre el panel */
+.side-panel.open {
+    right: 0;
+}
+
+.side-panel h3 {
+    color: #ffffff;
+    font-size: 1.5rem;
+    font-weight: 900;
+    margin-bottom: 5px;
+}
+
+.close-btn {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    background: transparent;
+    border: none;
+    color: #888888;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+.close-btn:hover { color: #b87333; }
+
+#preloader {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background-color: #0b0b0b; 
+    z-index: 999999; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.8s ease, visibility 0.8s;
+}
+
+.loader-logo-wrapper {
+    position: relative;
+    height: 45px; 
+    width: 250px; 
+}
+
+.loader-img {
+    height: 100%;
+    width: 250px; 
+    object-fit: contain;
+    object-position: left center;
+}
+
+.loader-bg {
+    position: absolute;
+    top: 0; left: 0;
+    opacity: 0.2; 
+    filter: grayscale(100%); 
+}
+
+.reveal-container {
+    position: absolute;
+    top: 0; left: 0;
+    height: 100%;
+    width: 0%; 
+    overflow: hidden; 
+    animation: fill-logo 3s ease-out forwards; 
+}
+
+.loader-color {
+    opacity: 1;
+}
+
+@keyframes fill-logo {
+    0% { width: 0%; }
+    100% { width: 100%; }
+}
+
+@keyframes engine-pulse {
+    0% { 
+        transform: scale(0.98); 
+        filter: drop-shadow(0 0 5px rgba(184, 115, 51, 0.2)); 
+    }
+    100% { 
+        transform: scale(1.02); 
+        filter: drop-shadow(0 0 25px rgba(184, 115, 51, 0.9)); 
+    }
+}
+
+@keyframes metallic-sweep {
+    0% { left: -100%; }
+    25% { left: 200%; }
+    100% { left: 200%; } 
+}
+/* =========================================
+   SECCIÓN FORMULARIO SPLIT (B2B)
+   ========================================= */
+.split-form-section {
+    display: flex;
+    width: 100%;
+    background-color: #888888; /* Rojo icónico corporativo de la referencia */
+    color: #ffffff;
+    min-height: 80vh;
+}
+
+.split-left {
+    flex: 1;
+    padding: 0px 0px;
+    display: flex;
+    flex-direction: column;
+    background-color: #888888;
+    justify-content: center;
+}
+
+.split-title {
+    font-size: 3.5rem;
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 25px;
+    text-transform: uppercase;
+    
+}
+
+.split-subtitle {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    font-weight: 700;
+    margin-bottom: 40px;
+    
+}
+
+.btn-location-wrapper {
+    margin-top: 20px;
+}
+
+.btn-location {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background-color: #ffffff;
+    color: #8b8b8b;
+    padding: 15px 30px;
+    border-radius: 6px;
+    font-weight: 800;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.btn-location:hover {
+    background-color: #f1f1f1;
+    transform: translateY(-2px);
+}
+
+.split-right {
+    flex: 1;
+    background-color: #888888;
+    padding: 80px 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.kartag-split-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    max-width: 550px;
+}
+
+.form-row {
+    display: flex;
+    gap: 20px;
+    width: 100%;
+}
+
+.form-row.full-width {
+    flex-direction: column;
+}
+
+.input-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.input-group label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.input-group input, 
+.input-group select {
+    width: 100%;
+    padding: 14px 16px;
+    background-color: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 6px;
+    color: #ffffff;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.input-group input:focus, 
+.input-group select:focus {
+    border-color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.25);
+}
+
+.input-group select option {
+    background-color: #1a1a1a;
+    color: #ffffff;
+}
+
+.phone-input-wrapper {
+    display: flex;
+    gap: 10px;
+}
+
+.country-code {
+    width: 90px !important;
+}
+
+.form-disclaimer {
+    font-size: 0.75rem;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.8);
+    margin-top: 10px;
+}
+
+.btn-submit-split {
+    background-color: #050505;
+    color: #ffffff;
+    border: none;
+    padding: 16px;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+    margin-top: 10px;
+}
+
+.btn-submit-split:hover {
+    background-color: #222222;
+    transform: translateY(-2px);
+}
+.site-footer {
+    background-color: #0d0d0d; 
+    background-size: cover;
+    color: #ffffff;
+    font-family: 'Montserrat', sans-serif;
+    padding: 60px 170px 20px 150px;
+}
+
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    gap: 40px;
+    flex-wrap: wrap; 
+}
+
+.footer-col {
+    flex: 1;
+    min-width: 220px;
+}
+
+.footer-logo {
+    max-width: 200px;
+    margin-bottom: 30px;
+}
+
+.footer-title {
+    color: #b87333; 
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin-bottom: 25px;
+    letter-spacing: 0.5px;
+}
+
+.footer-text {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: #e0e0e0;
+    margin-bottom: 15px;
+}
+.footer-text.uppercase {
+    text-transform: uppercase;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}
+
+.social-icons {
+    display: flex;
+    justify-content: flex-start; 
+    align-items: center;         
+    gap: 15px;                   
+    margin-top: 20px;
+}
+.social-icons a {
+    display: inline-flex;
+    transition: transform 0.3s ease, opacity 0.3s ease; 
+}
+.social-icons img {
+    width: 32px; height: 32px;            
+    object-fit: contain;     
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); 
+}
+.social-icons a:hover {
+    transform: translateY(-3px); 
+    opacity: 0.8;                
+}
+.social-icons img[alt="WhatsApp"] {
+    transform: scale(0.65); 
+}
+
+/* ACORDEÓN  */
+.accordion {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.accordion-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.accordion-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #ffffff;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    border-bottom: 1px solid #b87333; 
+    padding-bottom: 5px;
+    transition: border-color 0.3s ease;
+}
+.chevron {
+    width: 10px; height: 10px;
+    border-right: 2px solid #b87333;
+    border-bottom: 2px solid #b87333;
+    transform: rotate(45deg); 
+    transition: transform 0.3s ease;
+    margin-bottom: 4px;
+}
+
+.accordion-content {
+    color: #b87333;
+    font-size: 0.9rem;
+    font-weight: 500;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: all 0.4s ease;
+}
+
+.accordion-item.active .accordion-header {
+    border-bottom: 1px solid transparent;
+}
+.accordion-item.active .chevron {
+    transform: rotate(-135deg);
+    margin-top: 4px;
+}
+.accordion-item.active .accordion-content {
+    max-height: 50px; 
+    opacity: 1;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.footer-bottom {
+    max-width: 1200px;
+    margin: 60px auto 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05); 
+    padding-top: 20px;
+}
+.footer-k-logo {
+    height: 20px;
+}
+.footer-bottom span {
+    font-size: 0.75rem;
+    color: #888888;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+/* Ajustes Responsive para Móviles */
+@media (max-width: 768px) {
+    html, body {
+        overflow-x: hidden;
+        width: 100%;
+    }
+
+    .hero-section {
+        background-image: url('../assets/img/movil.png'); 
+        background-size: cover; 
+        background-position: center; 
+    }
+
+    .navbar {
+        flex-direction: column; 
+        padding: 10px 15px;
+        width: 95%;
+        border-radius: 20px; 
+        gap: 12px; 
+        left: 2.5%; 
+        transform: none; 
+    }
+   
+    .nav-icons {
+        display: flex !important; 
+        position: absolute; 
+        top: 14px; right: 0px; 
+        margin-left: 0; 
+        gap: 0px; 
+    }
+    .nav-icons .icon-link { margin-left: -5px; }
+    .nav-icons .icon-link:first-child { margin-left: 0; }
+    .nav-icons img.nav-icon-img { width: 18px; height: 18px; }
+
+    .logo { flex: none; margin: 0 auto; }
+    .logo img { height: 28px; width: auto; }
+    .nav-indicator { display: none !important; }
+
+    .nav-links {
+        display: flex !important; 
+        flex-direction: row; 
+        position: relative;
+        width: 100%; height: auto;
+        background: transparent;
+        padding: 0; box-shadow: none;
+        gap: 3px; 
+        top: 0; right: 40px;
+    }
+    .nav-links a {
+        flex: 1; 
+        font-size: 0.75rem; 
+        text-align: center;
+        padding: 8px 0; margin: 0;
+        border-radius: 25px; 
+        background-color: rgba(0, 0, 0, 0.05); 
+        color: #888888;
+        font-weight: 600;
+        border-bottom: none; 
+        overflow: hidden; 
+        white-space: nowrap; 
+        transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); 
+    }
+    .nav-links a.active {
+        flex: 1.5; 
+        background-color: #b87333; 
+        color: #ffffff; 
+        font-size: 0.85rem; 
+    }
+    
+    .hero-container {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 120px 20px 40px 20px; 
+        height: auto;
+        min-height: 100vh;
+        gap: 40px;
+    }
+    .hero-content {
+        max-width: 100%;
+        margin-left: 0;
+        top: 0;
+        text-align: center;
+    }
+    .hero-content h1 {
+        font-size: 2.1rem;
+        margin-bottom: 15px;
+        line-height: 1.25;
+        color: #000000 !important;
+    }
+    .hero-content h1 span {
+        background: none !important; 
+        -webkit-text-fill-color: #000000 !important; 
+        color: #000000 !important;
+    }
+    .hero-content p {
+        font-size: 1rem;
+        color: #f8f8f8;
+    }
+
+    .promo-widget {
+        width: 100%;
+        max-width: 380px; 
+        padding: 20px;
+        margin: 0;
+        top: 0; 
+    }
+    .promo-media, .mini-leaderboard { height: 270px; }
+    .promo-overlay { padding: 60px 15px 15px 15px; }
+    .promo-overlay h3 { font-size: 1.1rem; }
+    .driver-photo { height: 100%; }
+
+    .nosotros-section {
+        aspect-ratio: auto; 
+        padding: 40px 20px;
+        min-height: auto;
+    }
+    .nosotros-header {
+        position: relative; 
+        top: 0; left: 0;
+        width: 100%;
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    .nosotros-header p { font-size: 1rem !important; }
+
+    .stats-grid {
+        position: relative; 
+        display: grid;
+        grid-template-columns: 1fr; 
+        gap: 20px;
+        padding: 0;
+    }
+    .stat-card {
+        position: relative; 
+        width: 100%;
+        height: auto;
+        min-height: 150px;
+        top: auto !important; 
+        left: auto !important;
+        padding: 20px;
+        border-bottom: 3px solid rgba(255,255,255,0.1);
+    }
+    .stat-card::before { top: 18px; left: 26px; width: 45px; height: 45px; }
+    .number-box h2 { font-size: 3rem; }
+
+    .circuitos-section {
+        margin: 60px auto 40px auto;
+        padding: 0 15px;
+    }
+    .circuitos-header {
+        margin-left: 0; 
+        margin-top: 0;
+        text-align: center;
+    }
+    .circuit-row {
+        width: 100%;
+        left: 0; right: 0;
+        margin-left: 0; 
+        margin-right: 0;
+        flex-direction: column !important;
+    }
+    .circuit-info {
+        padding: 30px 20px;
+        align-items: center;
+        text-align: center;
+    }
+    .circuit-info h3, 
+    .circuit-info h4, 
+    .circuit-info p, 
+    .circuit-info .btn-ver-mas { margin-left: 0; }
+    .circuit-info p { max-width: 100%; }
+
+    .cockpit-title { font-size: 2rem; }
+    .btn-partner { padding: 15px 30px; font-size: 0.9rem; }
+
+    .footer-container {
+        flex-direction: column;
+        gap: 40px;
+        text-align: center;
+    }
+    .footer-col {
+        width: 100%;
+        min-width: 100%;
+        padding-top: 15px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1); 
+    }
+    .footer-logo { margin: 0 auto 20px auto; }
+    .social-icons { justify-content: center; }
+    .footer-bottom {
+        flex-direction: column;
+        text-align: center;
+        gap: 15px;
+    }
+    .globe-b2b-section {
+        padding: 80px 20px; /* Reducimos el padding gigante del escritorio */
+    }
+    
+    .globe-layout {
+        flex-direction: column;
+        margin-top: 0;
+    }
+
+    #globe-container {
+        max-width: 100%;
+        height: 600px; /* Globo más pequeño para que quepa en la pantalla */
+        transition: transform 0.4s ease, opacity 0.4s ease;
+        transform: translate(-90px, 0px);
+    }
+
+    /* En móvil, el globo no se va a la izquierda. Se queda en el centro, se encoge un poquito y se oscurece */
+    #globe-container.shift-left {
+        transform: scale(0.85) !important;
+        opacity: 0.3; 
+    }
+
+    /* El panel de información se convierte en una ventana emergente (Modal) centrada */
+    .side-panel {
+        width: 90%;
+        max-width: 400px;
+        right: auto;
+        left: 50%;
+        top: 50%;
+        /* Lo mantenemos oculto y encogido por defecto */
+        transform: translate(-50%, -50%) scale(0.9);
+        opacity: 0;
+        pointer-events: none; /* Evita clics fantasma cuando está oculto */
+        border-left: none;
+        border-top: 4px solid #b87333; /* Borde de adorno arriba en lugar de al lado */
+        border-radius: 12px;
+        box-shadow: 0 15px 50px rgba(0,0,0,0.9);
+        text-align: center; /* Centramos el texto del panel */
+    }
+
+    /* Cuando el panel se abre en móvil */
+    .side-panel.open {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+        pointer-events: auto;
+        z-index: 100;
+    }
+
+    /* 2. SECCIÓN DEL FORMULARIO DIVIDIDO (SPLIT) EN MÓVIL */
+    .split-form-section {
+        flex-direction: column; /* Apilamos los elementos: Textos arriba, formulario abajo */
+    }
+
+    /* Mitad Izquierda (Textos) */
+    .split-left {
+        padding: 60px 20px 40px 20px;
+        align-items: center; /* Centramos todo */
+        text-align: center;
+    }
+
+    .split-title {
+        font-size: 2.5rem !important; /* Letra más pequeña para que no se salga */
+        text-align: center;
+    }
+
+    .split-subtitle {
+        font-size: 1rem !important;
+        text-align: center;
+        max-width: 100%;
+    }
+
+    /* Mitad Derecha (Formulario) */
+    .split-right {
+        padding: 40px 20px 60px 20px;
+    }
+
+    .kartag-split-form {
+        max-width: 100%;
+    }
+
+    /* Forzamos a que First Name y Last Name se pongan uno debajo del otro */
+    .form-row {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .btn-submit-split {
+        width: 100%; /* Botón gigante para pulgares */
+        padding: 18px;
+    }
+
+}

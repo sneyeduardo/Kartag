@@ -10,9 +10,7 @@ body {
             color: #ffffff;
         }
 
-        /* =========================================
-           Navbar (Copia de index.html para consistencia)
-           ========================================= */
+        /* Navbar (Copia de index.html para consistencia) */
         .navbar {
             display: flex;
             justify-content: space-between;
