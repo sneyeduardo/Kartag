@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KARTAG | Feel the adrenaline</title>   
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="lang-de"> <!-- Defaults to German as requested -->
+    
+    <!-- Language Switcher Tab -->
+
+    <!-- KARTAG LOADING SCREEN -->
+     <div id="preloader">
+        <div class="loader-logo-wrapper">
+            <!-- 1. Background logo (dimmed) -->
+            
+            <!-- 2. Container expanding from left to right -->
+            <div class="reveal-container">
+                <img src="assets/img/logo.png" alt="Loading Kartag" class="loader-img loader-color">
+            </div>
+        </div>
+    </div> 
+
+    <!-- Navbar -->
+    <header class="navbar">
+        <div class="logo">
+            <img src="assets/img/logo.png" alt="Kartag RC">
+        </div>
+        
+        <div class="nav-links">
+            <a href="#inicio" class="active"><span class="lang-en">Home</span><span class="lang-de">Startseite</span></a>
+            <a href="#nosotros"><span class="lang-en">About Us</span><span class="lang-de">Über Uns</span></a>
+            <a href="#descubrir"><span class="lang-en">Discover</span><span class="lang-de">Entdecken</span></a>
+            <a href="#modelos"><span class="lang-en">Models</span><span class="lang-de">Modelle</span></a>
+            <div class="nav-indicator"></div>
+        </div>
+        
+        <div class="nav-icons">
+            <a href="#" class="icon-link">
+                <img src="assets/img/preguntas.png" alt="Help" class="nav-icon-img">
+            </a>
+            <a href="#" class="icon-link">
+                <img src="assets/img/ubicacion.png" alt="Location" class="nav-icon-img">
+            </a>
+            <a href="login.html" class="icon-link">
+                <img src="assets/img/usuario.png" alt="User" class="nav-icon-img">
+            </a>
+        <div id="lang-switcher">
+        <span id="btn-de" class="active" onclick="switchLang('de')">DE</span>
+        <span id="btn-en" onclick="switchLang('en')">EN</span>
+    </div>
+        </div>
+    </header>
+    
+    <main>
+        <!-- Hero Section -->
+        <section id="inicio" class="hero-section">
+            <div class="hero-overlay"></div>           
+            <div class="hero-container">
+                <div class="hero-content">
+                    <h1 class="lang-en">Feel the adrenaline <span>of</span><br><span>professional</span> racing</h1>
+                    <h1 class="lang-de">Spüre das Adrenalin <span>des</span><br><span>professionellen</span> Rennsports</h1>
+                    <p class="lang-en">High-performance cockpits on the best F1 tracks, scaled.</p>
+                    <p class="lang-de">Hochleistungs-Cockpits auf den besten F1-Strecken, maßstabsgetreu.</p>
+                </div>
+                
+                <!-- Promotional / Advertising Widget -->
+                <div class="promo-widget">
+                    <div class="carousel-wrapper">
+                        <div class="carousel-track" id="promo-track">
+                            
+                            <!-- SLIDE 1: FPV Demo Video -->
+                            <div class="carousel-slide active-slide">
+                                <video autoplay loop muted playsinline class="promo-media">
+                                    <source src="assets/img/F1Edit.mp4" type="video/mp4">
+                                </video>
+                                <div class="promo-overlay">
+                                    <span class="promo-badge"><span class="lang-en">NEW</span><span class="lang-de">NEU</span></span>
+                                    <h3 class="lang-en">EXPERIENCE FPV IMMERSION</h3>
+                                    <h3 class="lang-de">ERLEBE FPV IMMERSION</h3>
+
+                                    <!-- Exclusive button for the video -->
+                                    <a href="#descubrir" class="btn-ver-mas slide-btn"><span class="lang-en">DISCOVER</span><span class="lang-de">ENTDECKEN</span> <span class="plus-icon">+</span></a>
+                                </div>
+                            </div>
+
+                            <!-- SLIDE 2: Sponsor or Hardware Banner -->
+                            <div class="carousel-slide">
+                                <img src="assets/img/circuito.jpg" alt="Promo Cockpit" class="promo-media">
+                                <div class="promo-overlay">
+                                    <span class="promo-badge sponsor">SPONSOR</span>
+                                    <h3 class="lang-en">UPGRADE YOUR COCKPIT</h3>
+                                    <h3 class="lang-de">RÜSTE DEIN COCKPIT AUF</h3>
+                                    <p class="lang-en">Get the new professional structure.</p>
+                                    <p class="lang-de">Hol dir die neue professionelle Struktur.</p>
+                                    <!-- Exclusive button for the Sponsor -->
+                                    <a href="#modelos" class="btn-ver-mas slide-btn"><span class="lang-en">VIEW EQUIPMENT</span><span class="lang-de">AUSRÜSTUNG ANSEHEN</span> <span class="plus-icon">+</span></a>
+                                </div>
+                            </div>  
+                    
+                            <!-- SLIDE 3: Top Drivers (Mini Leaderboard) -->
+                            <div class="carousel-slide">
+                                <div class="mini-leaderboard">
+                                    <h3 class="mini-title"><span class="lang-en">CURRENT TOP DRIVERS</span><span class="lang-de">AKTUELLE TOP-FAHRER</span></h3>
+                                    <div class="leaderboard-list">
+                                        <!-- Row 1 -->
+                                        <div class="leaderboard-item">
+                                            <span class="rank">1</span>
+                                            <div class="driver-banner">
+                                                <img src="assets/img/logo.1.png" class="team-logo" alt="McLaren">
+                                                <img src="assets/img/norris.png" class="driver-photo" alt="Norris">
+                                                <span class="driver-name">NORRIS</span>
+                                            </div>
+                                            <span class="points">365</span>
+                                        </div> 
+                                        <!-- Row 2 -->
+                                        <div class="leaderboard-item">
+                                            <span class="rank">2</span>
+                                            <div class="driver-banner">
+                                                <img src="assets/img/logo.1.png" class="team-logo" alt="McLaren">
+                                                <img src="assets/img/leonardo.png" class="driver-photo ajuste-leonardo" alt="leonardo">
+                                                <span class="driver-name">LEONARDO</span>
+                                            </div>
+                                            <span class="points">355</span>
+                                        </div>
+                                        <!-- Row 3 -->
+                                        <div class="leaderboard-item">
+                                            <span class="rank">3</span>
+                                            <div class="driver-banner">
+                                                <img src="assets/img/logo.1.png" class="team-logo" alt="McLaren">
+                                                <img src="assets/img/piastri-removebg-preview.png" class="driver-photo" alt="Piastri">
+                                                <span class="driver-name">PIASTRI</span>
+                                            </div>
+                                            <span class="points">255</span>
+                                        </div>
+                                    </div>
+                                    <!-- Exclusive button for the drivers -->
+                                    <a href="#posiciones" class="btn-ver-mas slide-btn center-btn"><span class="lang-en">VIEW LEADERBOARD</span><span class="lang-de">RANGLISTE ANSEHEN</span> <span class="plus-icon">+</span></a>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+
+                    <div class="promo-footer">
+                        <!-- We remove the global button and only leave the centered dots -->
+                        <div class="pagination-dots" id="promo-dots">
+                            <span class="dot active"></span>
+                            <span class="dot"></span>
+                            <span class="dot"></span>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </section>
+
+        <section id="nosotros" class="nosotros-section">
+            
+            <!-- BACKGROUND VIDEO INSERTED HERE -->
+            <video class="video-fondo" autoplay loop muted playsinline>
+                <!-- Make sure to use the correct path where you saved the file -->
+                <source src="assets/img/VID-20260810-WA0020.mp4" type="video/mp4">
+            </video>
+
+            <div class="nosotros-header">
+                <span class="badge-nosotros"><span class="lang-en">ABOUT US</span><span class="lang-de">ÜBER UNS</span></span>
+                <p class="lang-en" style="font-size: 18px; line-height: 1.6;">At Kartag, we develop technological ecosystems that integrate professional simulation cockpits with real-time video feed from the perspective of a radio-controlled car on 1:32 scale F1 racing tracks.<br><br>From entry-level rigs to professional structures, they grow with you.</p>
+                <p class="lang-de" style="font-size: 18px; line-height: 1.6;">Bei Kartag entwickeln wir technologische Ökosysteme, die professionelle Simulations-Cockpits mit Echtzeit-Videoübertragungen aus der Perspektive eines ferngesteuerten Autos auf F1-Rennstrecken im Maßstab 1:32 integrieren.<br><br>Von Einsteiger-Rigs bis hin zu professionellen Strukturen – sie wachsen mit dir.</p>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card card-1">
+                    <div class="card-top-row">
+                        <div class="icon-box">
+                            <img src="assets/img/Pista.png" alt="Tracks">
+                        </div>
+                        <div class="number-box">
+                            <h2 class="counter" data-target="5">+0</h2>
+                        </div>
+                    </div>
+                    <div class="text-box">
+                        <p class="lang-en">World F1 tracks available to scale</p>
+                        <p class="lang-de">Weltweite F1-Strecken im Maßstab verfügbar</p>
+                    </div>
+                </div>
+
+                <div class="stat-card card-2">
+                    <div class="card-top-row">
+                        <div class="icon-box">
+                            <img src="assets/img/Carrito.png" alt="Cars">
+                        </div>
+                        <div class="number-box">
+                            <h2 class="counter" data-target="10">+0</h2>
+                        </div>
+                    </div>
+                    <div class="text-box">
+                        <p class="lang-en">RC car models with FPV systems and accessories available</p>
+                        <p class="lang-de">RC-Automodelle mit FPV-Systemen und Zubehör verfügbar</p>
+                    </div>
+                </div>
+
+                <div class="stat-card card-3">
+                    <div class="card-top-row">
+                        <div class="icon-box">
+                            <img src="assets/img/Piloto.png" alt="Users">
+                        </div>
+                        <div class="number-box">
+                            <h2 class="counter" data-target="97">+0</h2>
+                        </div>
+                    </div>
+                    <div class="text-box">
+                        <p class="lang-en">Users competing to hold the best record</p>
+                        <p class="lang-de">Nutzer, die um den besten Rekord wetteifern</p>
+                    </div>
+                </div>
+
+                <div class="stat-card card-4">
+                    <div class="card-top-row">
+                        <div class="icon-box">
+                            <img src="assets/img/Desarrollo.png" alt="Locations">
+                        </div>
+                        <div class="number-box">
+                            <h2 class="counter" data-target="7">+0</h2>
+                        </div>
+                    </div>
+                    <div class="text-box">
+                        <p class="lang-en">Locations developed alongside our commercial partners</p>
+                        <p class="lang-de">Gemeinsam mit unseren Handelspartnern entwickelte Standorte</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="descubrir" class="circuitos-section">
+            <div class="circuitos-header">
+                <span class="badge-circuitos"><span class="lang-en">OUR CIRCUITS</span><span class="lang-de">UNSERE STRECKEN</span></span>
+                <h2 class="circuitos-title lang-en">
+                    The perfect balance between <br>
+                    <span>physical realism, speed, and driving</span><br>
+                    in first person
+                </h2>
+                <h2 class="circuitos-title lang-de">
+                    Die perfekte Balance zwischen <br>
+                    <span>physischem Realismus, Geschwindigkeit und Fahren</span><br>
+                    in der Ego-Perspektive
+                </h2>
+            </div>
+            <div class="circuitos-content">
+                <div class="circuit-row fade-on-scroll">
+                    <div class="circuit-img">
+                        <img src="assets/img/circuito.jpg" alt="Monte Carlo Map" loading="lazy">
+                    </div>
+                    <div class="circuit-info">
+                        <h3 class="lang-en">CAD Design and <span>Scaling</span></h3>
+                        <h3 class="lang-de">CAD-Design und <span>Skalierung</span></h3>
+                        <h4 class="lang-en">Geometric precision</h4>
+                        <h4 class="lang-de">Geometrische Präzision</h4>
+                        <p class="lang-en">We vectorize the real circuit, adapting it to 1:18 RC physics</p>
+                        <p class="lang-de">Wir vektorisieren die echte Strecke und passen sie an die 1:18 RC-Physik an</p>
+                        <button class="btn-ver-mas"><span class="lang-en">SEE MORE</span><span class="lang-de">MEHR SEHEN</span> <span class="plus-icon">+</span></button> 
+                    </div>
+                </div>  
+                <div class="circuit-row fade-on-scroll">
+                    <div class="circuit-info">
+                        <h3 class="lang-en"><span>CNC</span> Machining</h3>
+                        <h3 class="lang-de"><span>CNC</span>-Bearbeitung</h3>
+                        <h4 class="lang-en">Structural relief</h4>
+                        <h4 class="lang-de">Strukturelles Relief</h4>
+                        <p class="lang-en">We design and manufacture sim racing cockpits using CNC techniques.</p>
+                        <p class="lang-de">Wir entwerfen und fertigen Sim-Racing-Cockpits mit CNC-Techniken.</p>
+                        <button class="btn-ver-mas"><span class="lang-en">SEE MORE</span><span class="lang-de">MEHR SEHEN</span> <span class="plus-icon">+</span></button>
+                    </div>
+                    <div class="circuit-img">
+                        <img src="assets/img/eso.jpg" alt="CNC Machining" loading="lazy">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="modelos" class="cockpit-section">
+            <div class="cockpit-container fade-on-scroll">
+                <h2 class="cockpit-title lang-en">High-performance cockpits designed<br>for true drivers</h2>
+                <h2 class="cockpit-title lang-de">Hochleistungs-Cockpits, entwickelt<br>für echte Fahrer</h2>
+                <p class="cockpit-description lang-en" style="font-size: 18px; line-height: 1.6;">
+                    This advanced system uses ultra-low latency technology to broadcast the first-person view<br>
+                    captured by the RC car's camera directly to the simulator driver's panoramic screen setup.<br>
+                    Robust design, premium materials, and real racing feel.
+                </p>
+                <p class="cockpit-description lang-de" style="font-size: 18px; line-height: 1.6;">
+                    Dieses fortschrittliche System nutzt Ultra-Low-Latency-Technologie, um die First-Person-Ansicht,<br>
+                    die von der Kamera des RC-Autos aufgenommen wird, direkt auf das Panorama-Setup des Simulators zu übertragen.<br>
+                    Robustes Design, Premium-Materialien und echtes Renngefühl.
+                </p>
+                <a href="socios.html" class="btn-partner"><span class="lang-en">BECOME A PARTNER</span><span class="lang-de">PARTNER WERDEN</span></a>
+            </div>
+            
+            <div class="cockpit-image-wrapper fade-on-scroll">
+                <img src="assets/img/pantallas.png" alt="Kartag high-performance simulator" loading="lazy">
+                <div class="fade-overlay"></div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-col footer-col-1">
+                <img src="assets/img/logo.png" alt="Kartag RC" class="footer-logo">
+                <h4 class="footer-title"><span class="lang-en">BUSINESS ADDRESS:</span><span class="lang-de">GESCHÄFTSADRESSE:</span></h4>
+                <p class="footer-text">
+                    Grestner Straße 9, Ybbsitz, Austria<br>
+                </p>
+            </div>
+
+            <!--Contact Us -->
+            <div class="footer-col footer-col-2">
+                <h4 class="footer-title"><span class="lang-en">CONTACT US:</span><span class="lang-de">KONTAKT:</span></h4>
+                <div class="accordion">
+                    
+                    <div class="accordion-item">
+                        <div class="accordion-header">INFO EMAIL <span class="chevron"></span></div>
+                        <div class="accordion-content">INFO@KARTAGRC.COM</div>
+                    </div>
+                    <div class="accordion-item">
+                        <div class="accordion-header">ADMIN EMAIL <span class="chevron"></span></div>
+                        <div class="accordion-content">ADMIN@KARTAGRC.COM</div>
+                    </div>
+                    <div class="accordion-item">
+                        <div class="accordion-header">NEWSLETTER EMAIL <span class="chevron"></span></div>
+                        <div class="accordion-content">NEWSLETTER@KARTAGRC.COM</div>
+                    </div>
+                </div>
+            </div>
+
+            <!--Hours-->
+            <div class="footer-col footer-col-3">
+                <h4 class="footer-title"><span class="lang-en">BUSINESS HOURS:</span><span class="lang-de">ÖFFNUNGSZEITEN:</span></h4>
+                <p class="footer-text uppercase"><span class="lang-en">TUESDAY - SUNDAY</span><span class="lang-de">DIENSTAG - SONNTAG</span></p>
+                <p class="footer-text uppercase">07:00 AM - 05:00 PM</p>
+            </div>
+
+            <!--About Us -->
+            <div class="footer-col footer-col-4">
+                <h4 class="footer-title"><span class="lang-en">ABOUT US:</span><span class="lang-de">ÜBER UNS:</span></h4>
+                <div class="accordion">
+                    <div class="accordion-item">
+                        <div class="accordion-header"><span class="lang-en">LOCATIONS</span><span class="lang-de">STANDORTE</span> <span class="chevron"></span></div>
+                        <div class="accordion-content" onclick="location.href='socios.html';">
+                            <span class="lang-en">OUR TRACKS</span><span class="lang-de">UNSERE STRECKEN</span>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <div class="accordion-content">
+                            <a href="#" id="btn-abrir-mapa" style="color: white; text-decoration: none; font-weight: bold; border-bottom: 1px solid #b87333;">
+                                <span class="lang-en">FIND US (View 3D Map)</span><span class="lang-de">FINDE UNS (3D-Karte ansehen)</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <div class="accordion-header"><span class="lang-en">HOW TO BECOME A PARTNER?</span><span class="lang-de">WIE WERDE ICH PARTNER?</span> <span class="chevron"></span></div>
+                        <div class="accordion-content" onclick="location.href='socios.html';">
+                            <span class="lang-en">JOIN THE CLUB</span><span class="lang-de">TRITT DEM CLUB BEI</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <img src="assets/img/logo.png" alt="K" class="footer-k-logo">
+            <span>© 2026 KARTAGRC</span>
+        </div>
+    </footer>
+    
+    <script src="https://unpkg.com/globe.gl"></script>
+    <script src="js/main.js"></script>
+    <script>
+        // Language Switcher Script
+        function switchLang(lang) {
+            document.body.className = 'lang-' + lang;
+            document.getElementById('btn-en').className = (lang === 'en') ? 'active' : '';
+            document.getElementById('btn-de').className = (lang === 'de') ? 'active' : '';
+            localStorage.setItem('kartag_lang', lang);
+        }
+
+        // Initialize language on load
+        window.addEventListener('DOMContentLoaded', (event) => {
+            const savedLang = localStorage.getItem('kartag_lang') || 'de';
+            switchLang(savedLang);
+        });
+    </script>
+</body>
+</html>
