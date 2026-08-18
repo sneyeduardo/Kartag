@@ -26,16 +26,17 @@ body {
     -webkit-backdrop-filter: blur(12px); 
     border: 1px solid rgba(255, 255, 255, 0.15); 
     border-radius: 35px;
-    padding: 32px; 
+    padding: 7px; 
     width: 100%; 
-    max-width: 440px; 
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+    max-width: 430px; 
+    box-shadow: 0 10px 30px rgba(255, 255, 255, 0.5); 
     font-family: 'Montserrat', sans-serif;
-    margin-right: -30px; 
+    margin-right: 400px; 
     position: relative;
     top: 100px; 
     flex-shrink: 0; 
     overflow: hidden;
+    transform: translate(900px, 72px);
 }
 
 .promo-media {
@@ -254,6 +255,7 @@ body {
 .pagination-dots {
     display: flex;
     gap: 8px;
+    margin-top: -10px;
 }
 
 .pagination-dots .dot {
@@ -543,18 +545,54 @@ body {
 /*  HERO SECTION */
 .hero-section {
     position: relative;
-    width: 100%;
-    min-height: 100vh; 
-    background-image: url('../assets/img/Slideshow_01_fondo.png');
-    background-size: cover; 
-    background-position: center bottom; 
-    background-repeat: no-repeat;
-    background-color: #ffffff;  
-    display: flex;
-    margin-top: 80px;
-    align-items: center;
-    border-radius: 50px; 
+    width: 95%;
+    max-width: 1400px;
+    min-height: 650px; /* TAMAÑO DEFINIDO. No saltará ni se deformará */
+    margin: 100px auto 40px auto; 
+    border-radius: 30px;
     overflow: hidden;
+    background-color: white;
+    display: flex;
+    align-items: center; /* Centra el contenido verticalmente */
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    
+}
+/* Esto forzará a la imagen a comportarse como un fondo fijo y estático sin moverse */
+.hero-image {
+    position: absolute;
+    top: 0; 
+    left: 0;
+    width: 100%; 
+    height: 100%;
+    z-index: 1;
+}
+
+.hero-image img {
+    width: 100%; 
+    height: 100%;
+    object-fit: cover; /* Rellena la caja fija sin distorsionarse */
+    object-position: center right; /* Mantiene la pista a la vista */
+    pointer-events: none;
+}
+
+/* Asegúrate de que el contenido de texto flote por encima de la imagen fija */
+.hero-content {
+    position: absolute;
+    top: 50%;
+    left: 5%; /* Margen izquierdo */
+    transform: translateY(-50%);
+    z-index: 2;
+    max-width: 600px; /* Para que el texto no pise toda la pista de carreras */
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0; 
+    left: 0;
+    width: 100%; 
+    height: 100%;
+    background: linear-gradient(90deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.5) 45%, rgba(0,0,0,0) 100%);
+    z-index: 2;
 }
 
 @keyframes fadeInUp {
@@ -575,31 +613,16 @@ body {
     opacity: 0; 
     animation: fadeInUp 1s ease-out 0.4s forwards; 
 }
-.hero-overlay {
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;   
-    z-index: 1;
-}
+
 .hero-container {
     position: relative;
-    z-index: 2;
-    max-width: 1420px; 
+    z-index: 3;
     width: 100%;
-    margin: 0 auto;
-    padding: 0 40px;
     display: flex;
-    justify-content: space-between;
-    align-items: flex-end; 
-    height: 100vh; 
-    padding-bottom: 8%; 
-}
-
-.hero-content {
-    max-width: 60%;
-    position: relative;
-    top: 70px;
-    margin-left: 20px;
+    justify-content: space-between; /* Empuja el texto a la izq y widget a la der */
+    align-items: center;
+    padding: 0 60px;
+    gap: 40px;
 }
 
 .hero-content h1 {
@@ -771,7 +794,7 @@ img.ajuste-leonardo {
 .circuitos-section {
     max-width: 1200px; 
     margin: 80px auto 60px auto; 
-    padding: 0 20px;
+    padding: 0 0px;
     font-family: 'Montserrat', sans-serif;
 }
 
@@ -1257,11 +1280,11 @@ img.ajuste-leonardo {
 #globe-container {
     width: 100%;
     margin: 20px auto 0 auto;
-    display: flex;
+    display: none;
     justify-content: center;
     align-items: center;
     cursor: grab;
-    transform: translate(0px, 150px);
+    transform: translate(0px, 2000px);
 }
 #globe-container:active { 
     cursor: grabbing; 
